@@ -391,42 +391,49 @@ nav_panel("Results",
 )
 )
 #funct  format summary===============
-format_summary_matrix <- function(out, contribution) {
+format_summary_matrix <- function(out) {
+  percentage_rows <- c("Vexp", "Cvexp", "Rvexp", "Rcvexp")
+  integer_rows <- "Card"
+  correlation_rows <- "r"
   
-  # Define which rows get which formatting
-  percentage_rows <- c("VEXP", "CVEXP", "RVEXP", "RCVEXP", "MinCont")
-  
-  integer_rows <- c("Card", "Converged")
-  decimal_rows <- "MinLoad"
-  
-  # Format each row
   fx <- matrix("", nrow = nrow(out), ncol = ncol(out))
   rownames(fx) <- rownames(out)
   colnames(fx) <- colnames(out)
   
-  for (i in 1:nrow(out)) {
+  for (i in seq_len(nrow(out))) {
     row_name <- rownames(out)[i]
     
     if (row_name %in% percentage_rows) {
-      # Format as percentage with 1 decimal
-      fx[i, ] <- paste0(format(round(out[i, ], 1), nsmall = 1, 
-                               drop0trailing = FALSE, justify = "right"), "%")
-      
+      fx[i, ] <- paste0(
+        format(
+          round(100 * out[i, ], 1),
+          nsmall = 1,
+          drop0trailing = FALSE,
+          justify = "right"
+        ),
+        "%"
+      )
     } else if (row_name %in% integer_rows) {
-      # Format as integer
-      fx[i, ] <- format(round(out[i, ]), drop0trailing = TRUE, 
-                        justify = "right", trim = TRUE, nsmall = 0)
-      
-    } else if (row_name %in% decimal_rows) {
-      # Format with 3 decimals (not percentage)
-      fx[i, ] <- format(round(out[i, ], 3), nsmall = 3, 
-                        drop0trailing = FALSE, justify = "right")
+      fx[i, ] <- format(round(out[i, ]), trim = TRUE)
+    } else if (row_name %in% correlation_rows) {
+      fx[i, ] <- format(
+        round(out[i, ], 2),
+        nsmall = 2,
+        drop0trailing = FALSE,
+        justify = "right"
+      )
+    } else {
+      fx[i, ] <- format(
+        round(out[i, ], 3),
+        nsmall = 3,
+        drop0trailing = FALSE,
+        justify = "right"
+      )
     }
   }
   
-  return(fx)
+  fx
 }
-
 
 server <- function(input, output, session) {
   
@@ -780,23 +787,45 @@ server <- function(input, output, session) {
   
   output$manual_summary_tbl <- renderDT({
     req(manual_fit())
-    s <- summary(manual_fit(), contributions = isTRUE(input$plotcontrib), min_load = TRUE,
-                 return_table = TRUE, print_table = FALSE)
-    fx <- format_summary_matrix(s, isTRUE(input$plotcontrib))
-    DT::datatable(fx, options = list(pageLength = 10, scrollX = TRUE), rownames = TRUE)
+    summary_args <- list(
+      object = manual_fit(),
+      contributions = isTRUE(input$plotcontrib),
+      min_load = FALSE,
+      cor_with_pc = TRUE,
+      return_table = TRUE,
+      print_table = FALSE
+    )
+    s <- do.call(summary, summary_args)
+    fx <- format_summary_matrix(s)
+    DT::datatable(fx, options = list(pageLength =  20, scrollX = TRUE, dom = "t"), rownames = TRUE)
   })
   
   output$manual_compare_tbl <- renderDT({
     req(fit(), manual_fit())
     n_compare <- min(ncol(fit()$loadings), ncol(manual_fit()$loadings))
-    s_fit <- summary(fit(), cols = n_compare, contributions = isTRUE(input$plotcontrib),
-                     min_load = TRUE, return_table = TRUE, print_table = FALSE)
-    s_manual <- summary(manual_fit(), cols = n_compare, contributions = isTRUE(input$plotcontrib),
-                        min_load = TRUE, return_table = TRUE, print_table = FALSE)
+    summary_fit_args <- list(
+      object = fit(),
+      cols = n_compare,
+      contributions = isTRUE(input$plotcontrib),
+      min_load = FALSE,
+      cor_with_pc = TRUE,
+      return_table = TRUE,
+      print_table = FALSE
+    )
+    summary_manual_args <- list(
+      object = manual_fit(),
+      cols = n_compare,
+      contributions = isTRUE(input$plotcontrib),
+      min_load = FALSE,
+      return_table = TRUE,
+      print_table = FALSE
+    )
+    s_fit <- do.call(summary, summary_fit_args)
+    s_manual <- do.call(summary, summary_manual_args)
     rownames(s_fit) <- paste0("Fitted: ", rownames(s_fit))
     rownames(s_manual) <- paste0("Manual: ", rownames(s_manual))
     out <- rbind(s_fit, s_manual)
-    fx <- format_summary_matrix(out, isTRUE(input$plotcontrib))
+    fx <- format_summary_matrix(out)
     DT::datatable(fx, options = list(pageLength = 20, scrollX = TRUE), rownames = TRUE)
   })
     # ---------- Results ----------
@@ -804,8 +833,16 @@ server <- function(input, output, session) {
   
   output$sumtbl <- renderDT({
     req(fit())
-    s  <- summary(fit(), contributions = isTRUE(input$plotcontrib), min_load = TRUE, return_table = TRUE, print_table = FALSE)
-    fx <- format_summary_matrix(s, isTRUE(input$plotcontrib))
+    summary_args <- list(
+      object = fit(),
+      contributions = isTRUE(input$plotcontrib),
+      min_load = FALSE,
+      cor_with_pc = TRUE,
+      return_table = TRUE,
+      print_table = FALSE
+    )
+    s <- do.call(summary, summary_args)
+    fx <- format_summary_matrix(s)
     DT::datatable(fx, options = list(pageLength = 10, scrollX = TRUE), rownames = TRUE)
   })
   # ---- Results UI helpers  
@@ -923,18 +960,19 @@ server <- function(input, output, session) {
       legend_position = if (use_sep) "bottom" else "none",
       grid_type = "horizontal"
     )
+    plot_args <- list(
+      x = obj,
+      n_plot = kplot,
+      plot_type = input$plot_type %||% "bars",
+      contributions = isTRUE(input$plotcontrib),
+      only_nonzero = isTRUE(input$only_nonzero_plot),
+      variable_groups = vg,
+      controls = controls,
+      return_plot = FALSE,
+      show_plot = TRUE
+    )
     tryCatch({
-      plot(
-        obj,
-        n_plot = kplot,
-        plot_type = input$plot_type %||% "bars",
-        contributions = isTRUE(input$plotcontrib),
-        only_nonzero = isTRUE(input$only_nonzero_plot),
-        variable_groups = vg,
-        controls = controls,
-        return_plot = FALSE,
-        show_plot = TRUE
-      )
+      do.call(plot, plot_args)
     }, error = function(e) {
       plot.new()
       text(0.5, 0.5, paste("Plot failed:", conditionMessage(e)))

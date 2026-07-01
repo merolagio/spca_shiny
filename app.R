@@ -68,16 +68,17 @@ app_css <- "
   padding-left: 1rem !important;
   padding-right: 1rem !important;
 }
-.navbar-nav .nav-item:nth-child(1) .nav-link { background: #1f77b4; color: #ffffff !important; }
-.navbar-nav .nav-item:nth-child(2) .nav-link { background: #2ca25f; color: #ffffff !important; }
-.navbar-nav .nav-item:nth-child(3) .nav-link { background: #756bb1; color: #ffffff !important; }
-.navbar-nav .nav-item:nth-child(4) .nav-link { background: #e08214; color: #ffffff !important; }
-.navbar-nav .nav-item:nth-child(5) .nav-link { background: #4d4d4d; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(1) .nav-link { background: #E69F00; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(2) .nav-link { background: #56B4E9; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(3) .nav-link { background: #009E73; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(4) .nav-link { background: #F0E442; color: #111111 !important; }
+.navbar-nav .nav-item:nth-child(5) .nav-link { background: #0072B2; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(6) .nav-link { background: #D55E00; color: #ffffff !important; }
+.navbar-nav .nav-item:nth-child(7) .nav-link { background: #CC79A7; color: #ffffff !important; }
 .navbar .nav-link.active,
 .navbar .nav-link:focus,
 .navbar .nav-link:hover {
   filter: brightness(0.88);
-  color: #ffffff !important;
 }
 .bslib-sidebar-layout > .sidebar,
 .sidebar {
@@ -123,6 +124,11 @@ app_css <- "
   color: #435766;
   font-size: 0.9rem;
   margin-bottom: 8px;
+}
+.compare-status-line {
+  font-family: Consolas, 'Courier New', monospace;
+  white-space: pre-wrap;
+  margin-bottom: 12px;
 }
 "
 ui <- page_navbar(
@@ -308,56 +314,7 @@ nav_panel(
         card(
           card_header("Status"),
           verbatimTextOutput("status")
-        ),
-        card(
-          card_header("Manual loadings"),
-          div(
-            class = "upload-drop-zone",
-            div(class = "upload-drop-note", "Drop a CSV/TXT loading matrix here or use Browse."),
-            fileInput(
-              "manual_loadings_file",
-              "Loading matrix (variables x components)",
-              accept = c(".csv", ".txt"),
-              buttonLabel = "Browse..."
-            )
-          ),
-          checkboxInput("manual_header", "First row contains component names", FALSE),
-          textInput("manual_sep", "Separator for uploaded matrices", value = ","),
-          radioButtons(
-            "manual_context",
-            "Matrix used with new_spca",
-            choices = c(
-              "Current Data-tab matrix" = "current_x",
-              "Upload data matrix" = "upload_x",
-              "Upload covariance/correlation matrix" = "upload_s"
-            ),
-            selected = "current_x"
-          ),
-          conditionalPanel(
-            condition = "input.manual_context == 'upload_x'",
-            div(
-              class = "upload-drop-zone",
-              div(class = "upload-drop-note", "Drop the data matrix used by the loadings."),
-              fileInput("manual_data_file", "Data matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
-            ),
-            checkboxInput("manual_data_header", "Data matrix has header", TRUE)
-          ),
-          conditionalPanel(
-            condition = "input.manual_context == 'upload_s'",
-            div(
-              class = "upload-drop-zone",
-              div(class = "upload-drop-note", "Drop the covariance/correlation matrix used by the loadings."),
-              fileInput("manual_s_file", "Covariance/correlation matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
-            ),
-            checkboxInput("manual_s_header", "Covariance/correlation matrix has header", TRUE)
-          ),
-          actionButton("make_manual_spca", "Create SPCA object", class = "btn-secondary"),
-          br(), br(),
-          verbatimTextOutput("manual_status"),
-          DTOutput("manual_summary_tbl"),
-          DTOutput("manual_compare_tbl")
-        )
-      )
+        ))
     )
   ),
 nav_panel("Results",
@@ -388,6 +345,105 @@ nav_panel("Results",
               uiOutput("scale_card_ui")
             )
           )
+),
+nav_panel("Compare",
+  layout_sidebar(
+    sidebar = sidebar(
+      radioButtons(
+        "compare_source",
+        "Comparison source",
+        choices = c(
+          "Fit another model with the current data" = "fit_new",
+          "Create SPCA object from uploaded loadings" = "manual"
+        ),
+        selected = "fit_new"
+      ),
+      conditionalPanel(
+        condition = "input.compare_source == 'fit_new'",
+        selectInput(
+          "compare_variant", "Variant",
+          choices = c("cSPCA" = "cspca", "uSPCA" = "uspca", "pSPCA" = "pspca"),
+          selected = "cspca"
+        ),
+        selectInput(
+          "compare_selection", "Variable selection",
+          choices = c("Forward" = "fwd", "Forward-stepwise" = "step", "Backward" = "bkw"),
+          selected = "fwd"
+        ),
+        selectInput(
+          "compare_objective", "Selection objective",
+          choices = c("Squared correlation (r2)" = "r2", "Cumulative variance explained (CVEXP)" = "cvexp"),
+          selected = "r2"
+        ),
+        checkboxInput("compare_intensive", "Use intensive forward CVEXP selection", FALSE),
+        checkboxInput("compare_pm_loading", "Power method for PC/loadings", FALSE),
+        checkboxInput("compare_pm_varsel", "Power method inside variable selection", FALSE),
+        numericInput("compare_ncomp", "Components", value = 4, min = 1, step = 1),
+        numericInput("compare_alpha", "Target recovered variance (alpha)", value = 0.95, min = 0.50, max = 0.999, step = 0.01),
+        actionButton("compare_run", "Run comparison model", class = "btn-primary")
+      ),
+      conditionalPanel(
+        condition = "input.compare_source == 'manual'",
+        div(
+          class = "upload-drop-zone",
+          div(class = "upload-drop-note", "Drop a CSV/TXT loading matrix here or use Browse."),
+          fileInput(
+            "manual_loadings_file",
+            "Loading matrix (variables x components)",
+            accept = c(".csv", ".txt"),
+            buttonLabel = "Browse..."
+          )
+        ),
+        checkboxInput("manual_header", "First row contains component names", FALSE),
+        textInput("manual_sep", "Separator for uploaded matrices", value = ","),
+        radioButtons(
+          "manual_context",
+          "Matrix used with new_spca",
+          choices = c(
+            "Current Data-tab matrix" = "current_x",
+            "Upload data matrix" = "upload_x",
+            "Upload covariance/correlation matrix" = "upload_s"
+          ),
+          selected = "current_x"
+        ),
+        conditionalPanel(
+          condition = "input.manual_context == 'upload_x'",
+          div(
+            class = "upload-drop-zone",
+            div(class = "upload-drop-note", "Drop the data matrix used by the loadings."),
+            fileInput("manual_data_file", "Data matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
+          ),
+          checkboxInput("manual_data_header", "Data matrix has header", TRUE)
+        ),
+        conditionalPanel(
+          condition = "input.manual_context == 'upload_s'",
+          div(
+            class = "upload-drop-zone",
+            div(class = "upload-drop-note", "Drop the covariance/correlation matrix used by the loadings."),
+            fileInput("manual_s_file", "Covariance/correlation matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
+          ),
+          checkboxInput("manual_s_header", "Covariance/correlation matrix has header", TRUE)
+        ),
+        actionButton("make_manual_spca", "Create SPCA object", class = "btn-secondary")
+      ),
+      br(), br(),
+      downloadButton("dl_compare_rds", "Download comparison fit (.rds)"),
+      downloadButton("dl_compare_loadings_csv", "Download comparison loadings (.csv)"),
+      width = 360
+    ),
+    div(
+      class = "compare-status-line",
+      textOutput("compare_status", inline = TRUE)
+    ),
+    card(
+      card_header("Contribution comparison plot"),
+      plotOutput("manual_compare_plot", height = "450px", width = "100%")
+    ),
+    card(
+      card_header("Comparison summary"),
+      DTOutput("manual_summary_tbl")
+    )
+  )
 )
 )
 #funct  format summary===============
@@ -690,8 +746,51 @@ server <- function(input, output, session) {
     if (!is.null(run_err())) run_err() else ""
   })
   
+  observeEvent(input$compare_run, {
+    compare_err(NULL)
+    compare_fit(NULL)
+    
+    if (!requireNamespace("spca", quietly = TRUE)) {
+      compare_err("Package 'spca' not available.")
+      return()
+    }
+    
+    X <- Xmat()
+    
+    if (isTRUE(input$compare_intensive) && (!identical(input$compare_selection, "fwd") || !identical(input$compare_objective, "cvexp"))) {
+      compare_err("Intensive selection requires Forward selection and CVEXP objective.")
+      return()
+    }
+    if (ncol(X) > nrow(X) && (!identical(input$compare_selection, "fwd") || isTRUE(input$compare_intensive))) {
+      compare_err("Wide data use the fat-matrix backend, which supports forward selection only and not intensive selection.")
+      return()
+    }
+    
+    obj <- tryCatch({
+      spca::spca(
+        M = X,
+        n_comps = as.integer(input$compare_ncomp),
+        alpha = input$compare_alpha,
+        method = input$compare_variant,
+        var_selection = input$compare_selection,
+        objective = input$compare_objective,
+        intensive = isTRUE(input$compare_intensive),
+        pm_loading = isTRUE(input$compare_pm_loading),
+        pm_varsel = isTRUE(input$compare_pm_varsel)
+      )
+    }, error = function(e) e)
+    
+    if (inherits(obj, "error")) {
+      compare_err(conditionMessage(obj))
+    } else {
+      compare_fit(obj)
+    }
+  })
+  
   manual_fit <- reactiveVal(NULL)
   manual_err <- reactiveVal(NULL)
+  compare_fit <- reactiveVal(NULL)
+  compare_err <- reactiveVal(NULL)
   
   read_uploaded_matrix <- function(file_info, header = FALSE, sep = ",", what = "matrix") {
     if (is.null(file_info)) stop("Upload a ", what, " first.", call. = FALSE)
@@ -779,55 +878,95 @@ server <- function(input, output, session) {
     }
   })
   
-  output$manual_status <- renderText({
-    if (!is.null(manual_err())) return(paste("ERROR:", manual_err()))
-    if (!is.null(manual_fit())) return("Manual SPCA object created.")
-    "Upload a loading matrix and provide the data or covariance/correlation matrix used to evaluate it."
+  compare_obj <- reactive({
+    if (identical(input$compare_source %||% "fit_new", "manual")) {
+      manual_fit()
+    } else {
+      compare_fit()
+    }
+  })
+
+  compare_result <- reactive({
+    req(fit(), compare_obj())
+    n_compare <- min(ncol(fit()$loadings), ncol(compare_obj()$loadings))
+    vg <- if (isTRUE(scale_present()) && identical(input$sep_scales, "yes")) {
+      scale_fac()
+    } else {
+      NULL
+    }
+    spca::compare_spca(
+      list(fit(), compare_obj()),
+      n_comps = n_compare,
+      contributions = TRUE,
+      only_nonzero = input$only_nonzero_plot %||% TRUE,
+      variable_groups = vg,
+      plot_loadings = TRUE,
+      plot_type = input$plot_type %||% "bars",
+      methods_names = c("Main fit", "Comparison"),
+      color_scale = input$color_scale %||% "ggplot",
+      print_loadings = FALSE,
+      return_tables = TRUE,
+      print_tables = FALSE,
+      return_plot = TRUE,
+      show_plot = FALSE
+    )
+  })
+  
+  output$compare_status <- renderText({
+    if (identical(input$compare_source %||% "fit_new", "manual")) {
+      if (!is.null(manual_err())) return(paste("ERROR:", manual_err()))
+      if (!is.null(manual_fit())) return("Manual SPCA object created.")
+      return("Upload a loading matrix and provide the data or covariance/correlation matrix used to evaluate it.")
+    }
+    if (!is.null(compare_err())) return(paste("ERROR:", compare_err()))
+    if (!is.null(compare_fit())) return("Comparison model fitted.")
+    "Fit another model with the current Data-tab matrix, or switch to uploaded loadings."
   })
   
   output$manual_summary_tbl <- renderDT({
-    req(manual_fit())
-    summary_args <- list(
-      object = manual_fit(),
-      contributions = isTRUE(input$plotcontrib),
-      min_load = FALSE,
-      cor_with_pc = TRUE,
-      return_table = TRUE,
-      print_table = FALSE
-    )
-    s <- do.call(summary, summary_args)
+    out <- compare_result()
+    s <- out$summary
     fx <- format_summary_matrix(s)
     DT::datatable(fx, options = list(pageLength =  20, scrollX = TRUE, dom = "t"), rownames = TRUE)
   })
   
-  output$manual_compare_tbl <- renderDT({
-    req(fit(), manual_fit())
-    n_compare <- min(ncol(fit()$loadings), ncol(manual_fit()$loadings))
-    summary_fit_args <- list(
-      object = fit(),
-      cols = n_compare,
-      contributions = isTRUE(input$plotcontrib),
-      min_load = FALSE,
-      cor_with_pc = TRUE,
-      return_table = TRUE,
-      print_table = FALSE
-    )
-    summary_manual_args <- list(
-      object = manual_fit(),
-      cols = n_compare,
-      contributions = isTRUE(input$plotcontrib),
-      min_load = FALSE,
-      return_table = TRUE,
-      print_table = FALSE
-    )
-    s_fit <- do.call(summary, summary_fit_args)
-    s_manual <- do.call(summary, summary_manual_args)
-    rownames(s_fit) <- paste0("Fitted: ", rownames(s_fit))
-    rownames(s_manual) <- paste0("Manual: ", rownames(s_manual))
-    out <- rbind(s_fit, s_manual)
-    fx <- format_summary_matrix(out)
-    DT::datatable(fx, options = list(pageLength = 20, scrollX = TRUE), rownames = TRUE)
+  output$manual_compare_plot <- renderPlot({
+    req(compare_result())
+    print(compare_result()$loadings_plot)
   })
+
+  output$dl_compare_rds <- downloadHandler(
+    filename = function() paste0("spca_comparison_fit_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".rds"),
+    content = function(file) {
+      req(compare_obj())
+      saveRDS(compare_obj(), file = file)
+    }
+  )
+
+  output$dl_compare_loadings_csv <- downloadHandler(
+    filename = function() {
+      paste0("spca_comparison_loadings_", format(Sys.Date(), "%Y%m%d"), ".csv")
+    },
+    content = function(file) {
+      req(compare_obj())
+      obj <- compare_obj()
+
+      L <- tryCatch({
+        if (isS4(obj) && "loadings" %in% methods::slotNames(obj)) {
+          methods::slot(obj, "loadings")
+        } else if (is.list(obj) && "loadings" %in% names(obj)) {
+          obj$loadings
+        } else {
+          stop("Cannot find loadings in comparison object (no slot/element named 'loadings').")
+        }
+      }, error = function(e) {
+        data.frame(Error = conditionMessage(e), stringsAsFactors = FALSE)
+      })
+
+      utils::write.csv(L, file = file, row.names = TRUE)
+    }
+  )
+
     # ---------- Results ----------
 #SUMMARY TABLE============  
   

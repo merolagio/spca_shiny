@@ -30,10 +30,6 @@ app_logo_file <- file.path(getwd(), "spca_Logo_bordered.png")
 if (file.exists(app_logo_file)) {
   addResourcePath("spca_assets", normalizePath(dirname(app_logo_file), winslash = "/", mustWork = TRUE))
 }
-app_docs_dir <- file.path(getwd(), "docs")
-if (dir.exists(app_docs_dir)) {
-  addResourcePath("spca_docs", normalizePath(app_docs_dir, winslash = "/", mustWork = TRUE))
-}
 spca_logo_tag <- function() {
   if (!file.exists(app_logo_file)) return(NULL)
   tags$img(
@@ -41,9 +37,6 @@ spca_logo_tag <- function() {
     class = "spca-intro-logo",
     alt = "spca logo"
   )
-}
-spca_doc_href <- function(file) {
-  if (dir.exists(app_docs_dir)) paste0("spca_docs/", file) else paste0("docs/", file)
 }
 
 app_css <- "
@@ -186,28 +179,19 @@ card(card_header(
   p(tags$b("Vignettes")),
   p(
     "Introductory vignette ",
-    tags$a(href = spca_doc_href("spca_intro.html"), target = "_blank", "HTML"),
+    tags$a(href = "docs/spca_intro.html", target = "_blank", "HTML"),
     " ",
-    tags$a(href = spca_doc_href("spca_intro.pdf"), target = "_blank", "PDF")
+    tags$a(href = "docs/spca_intro.pdf", target = "_blank", "PDF")
   ),
   p(
     "Extended vignette ",
-    tags$a(href = spca_doc_href("spca_extended_vignette.html"), target = "_blank", "HTML"),
+    tags$a(href = "docs/spca_extended_vignette.html", target = "_blank", "HTML"),
     " ",
-    tags$a(href = spca_doc_href("spca_extended_vignette.pdf"), target = "_blank", "PDF")
+    tags$a(href = "docs/spca_extended_vignette.pdf", target = "_blank", "PDF")
   ),
-p("Refereed articles"),
-p("Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large loadings. Australia & New Zealand Journal of Statistics, 57, 391-429.",
-  tags$a(
-    href = "https://arxiv.org/abs/1406.1381",
-    target = "_blank",
-    "Preprint")
-), 
-p("Merola, G. M. and Chen, G. (2019). Projection sparse principal component analysis: An efficient least squares method. Journal of Multivariate Analysis, 173, 366-382.",
-  tags$a(
-    href = "https://arxiv.org/abs/1612.00939",
-    target = "_blank",
-    "Preprint"))
+p("Author Giovanni M. Merola"),
+p("Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large loadings. Australia & New Zealand Journal of Statistics, 57, 391-429."), 
+p("Merola, G. M. and Chen, G. (2019). Projection sparse principal component analysis: An efficient least squares method. Journal of Multivariate Analysis, 173, 366-382.")
 )
 )
   ), #end navpanel intro
@@ -1029,7 +1013,7 @@ server <- function(input, output, session) {
     sc <- scale_fac()
     vars <- colnames(Xmat())
     req(vars)
-    
+    "~/Codex/2026-06-29/i-w/Shiny/app.R"
     if (length(sc) != length(vars)) {
       return(DT::datatable(
         data.frame(

@@ -126,9 +126,23 @@ app_css <- "
   margin-bottom: 8px;
 }
 .compare-status-line {
-  font-family: Consolas, 'Courier New', monospace;
-  white-space: pre-wrap;
-  margin-bottom: 12px;
+  min-height: 0;
+  margin: 0 0 8px 0;
+  padding: 4px 8px;
+  line-height: 1.2;
+  font-size: 0.9rem;
+  font-family: inherit;
+  white-space: normal;
+}
+.compare-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.compare-table-wrap .datatables,
+.compare-table-wrap .dataTables_wrapper {
+  width: max-content;
+  min-width: 100%;
 }
 "
 ui <- page_navbar(
@@ -210,15 +224,7 @@ p("Merola, G. M. and Chen, G. (2019). Projection sparse principal component anal
             accept = ".csv"
           ),
           textInput("sep", "Separator", value = ","),
-          checkboxInput("header", "Header", TRUE),
-          numericInput(
-            "preview_digits",
-            "Preview rounding digits",
-            value = 2,
-            min = 0,
-            max = 10,
-            step = 1
-          )
+          checkboxInput("header", "Header", TRUE)
         ),
         numericInput(
           "preview_digits",
@@ -396,34 +402,17 @@ nav_panel("Compare",
         ),
         checkboxInput("manual_header", "First row contains component names", FALSE),
         textInput("manual_sep", "Separator for uploaded matrices", value = ","),
-        radioButtons(
-          "manual_context",
-          "Matrix used with new_spca",
-          choices = c(
-            "Current Data-tab matrix" = "current_x",
-            "Upload data matrix" = "upload_x",
-            "Upload covariance/correlation matrix" = "upload_s"
-          ),
-          selected = "current_x"
+        div(
+          class = "upload-drop-zone",
+          div(class = "upload-drop-note", "Optionally drop the covariance/correlation matrix used by the loadings."),
+          fileInput(
+            "manual_s_file",
+            "Optional covariance/correlation matrix",
+            accept = c(".csv", ".txt"),
+            buttonLabel = "Browse..."
+          )
         ),
-        conditionalPanel(
-          condition = "input.manual_context == 'upload_x'",
-          div(
-            class = "upload-drop-zone",
-            div(class = "upload-drop-note", "Drop the data matrix used by the loadings."),
-            fileInput("manual_data_file", "Data matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
-          ),
-          checkboxInput("manual_data_header", "Data matrix has header", TRUE)
-        ),
-        conditionalPanel(
-          condition = "input.manual_context == 'upload_s'",
-          div(
-            class = "upload-drop-zone",
-            div(class = "upload-drop-note", "Drop the covariance/correlation matrix used by the loadings."),
-            fileInput("manual_s_file", "Covariance/correlation matrix", accept = c(".csv", ".txt"), buttonLabel = "Browse...")
-          ),
-          checkboxInput("manual_s_header", "Covariance/correlation matrix has header", TRUE)
-        ),
+        checkboxInput("manual_s_header", "Covariance/correlation matrix has header", TRUE),
         actionButton("make_manual_spca", "Create SPCA object", class = "btn-secondary")
       ),
       br(), br(),
@@ -441,7 +430,10 @@ nav_panel("Compare",
     ),
     card(
       card_header("Comparison summary"),
-      DTOutput("manual_summary_tbl")
+      div(
+        class = "compare-table-wrap",
+        DTOutput("manual_summary_tbl")
+      )
     )
   )
 )
@@ -641,8 +633,8 @@ server <- function(input, output, session) {
   eigvals <- reactive({
     X <- Xmat()
     # eigenvalues of sample covariance/correlation as appropriate
-    S <- stats::cov(X)
-    ev <- sort(eigen(S, symmetric = TRUE, only.values = TRUE)$values, decreasing = TRUE)
+    S <- HelperSpcaShiny::cov_R(X) 
+    ev <- sort(spca:::eigenvalues_sym(S)$values, decreasing = TRUE)
     ev
   })
   
@@ -816,36 +808,9 @@ server <- function(input, output, session) {
   }
   
   manual_context_matrix <- function(A) {
-    context <- input$manual_context %||% "current_x"
     sep <- input$manual_sep %||% ","
     
-    if (identical(context, "current_x")) {
-      X <- Xmat()
-      if (nrow(A) != ncol(X)) {
-        stop(
-          "The loading matrix has ", nrow(A), " rows, but the current data have ",
-          ncol(X), " variables.",
-          call. = FALSE
-        )
-      }
-      rownames(A) <- colnames(X)
-      return(list(A = A, X = X, S = NULL))
-    }
-    
-    if (identical(context, "upload_x")) {
-      X <- read_uploaded_matrix(input$manual_data_file, input$manual_data_header, sep, "data matrix")
-      if (nrow(A) != ncol(X)) {
-        stop(
-          "The loading matrix has ", nrow(A), " rows, but the uploaded data matrix has ",
-          ncol(X), " variables.",
-          call. = FALSE
-        )
-      }
-      if (!is.null(colnames(X))) rownames(A) <- colnames(X)
-      return(list(A = A, X = X, S = NULL))
-    }
-    
-    if (identical(context, "upload_s")) {
+    if (!is.null(input$manual_s_file)) {
       S <- read_uploaded_matrix(input$manual_s_file, input$manual_s_header, sep, "covariance/correlation matrix")
       if (nrow(S) != ncol(S)) stop("The covariance/correlation matrix must be square.", call. = FALSE)
       if (nrow(A) != ncol(S)) {
@@ -859,7 +824,16 @@ server <- function(input, output, session) {
       return(list(A = A, X = NULL, S = S))
     }
     
-    stop("Unknown matrix source for new_spca().", call. = FALSE)
+    X <- Xmat()
+    if (nrow(A) != ncol(X)) {
+      stop(
+        "The loading matrix has ", nrow(A), " rows, but the current data have ",
+        ncol(X), " variables.",
+        call. = FALSE
+      )
+    }
+    rownames(A) <- colnames(X)
+    list(A = A, X = X, S = NULL)
   }
   
   observeEvent(input$make_manual_spca, {
@@ -916,7 +890,7 @@ server <- function(input, output, session) {
     if (identical(input$compare_source %||% "fit_new", "manual")) {
       if (!is.null(manual_err())) return(paste("ERROR:", manual_err()))
       if (!is.null(manual_fit())) return("Manual SPCA object created.")
-      return("Upload a loading matrix and provide the data or covariance/correlation matrix used to evaluate it.")
+      return("Upload a loading matrix. Optionally upload its covariance/correlation matrix to speed evaluation.")
     }
     if (!is.null(compare_err())) return(paste("ERROR:", compare_err()))
     if (!is.null(compare_fit())) return("Comparison model fitted.")
@@ -927,7 +901,17 @@ server <- function(input, output, session) {
     out <- compare_result()
     s <- out$summary
     fx <- format_summary_matrix(s)
-    DT::datatable(fx, options = list(pageLength =  20, scrollX = TRUE, dom = "t"), rownames = TRUE)
+    DT::datatable(
+      fx,
+      options = list(
+        pageLength = 20,
+        scrollX = TRUE,
+        autoWidth = TRUE,
+        dom = "t"
+      ),
+      class = "stripe hover nowrap",
+      rownames = TRUE
+    )
   })
   
   output$manual_compare_plot <- renderPlot({

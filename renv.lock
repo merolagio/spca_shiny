@@ -47,6 +47,29 @@
       "Maintainer": "Garrick Aden-Buie <garrick@posit.co>",
       "Repository": "CRAN"
     },
+    "HelperSpcaShiny": {
+      "Package": "HelperSpcaShiny",
+      "Version": "0.0.2",
+      "Source": "Local",
+      "Type": "Package",
+      "Title": "provides helpers to shiny app",
+      "Date": "2026-07-02",
+      "Author": "Title: Small C++ Helpers for the spca shiny App web-interface",
+      "Maintainer": "Giovanni Maria Merola <yourfault@somewhere.net>",
+      "Description": "collection of C++ utilities for shiny app",
+      "License": "GPL-3",
+      "Encoding": "UTF-8",
+      "Imports": [
+        "Rcpp (>= 1.0.14)"
+      ],
+      "LinkingTo": [
+        "Rcpp"
+      ],
+      "RoxygenNote": "7.3.2",
+      "NeedsCompilation": "yes",
+      "RemoteType": "local",
+      "RemoteUrl": "../HelperSpcaShiny_0.0.2.tar.gz"
+    },
     "R6": {
       "Package": "R6",
       "Version": "2.6.1",

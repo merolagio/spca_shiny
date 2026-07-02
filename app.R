@@ -522,7 +522,7 @@ server <- function(input, output, session) {
         input$file$datapath,
         sep = sep,
         header = isTRUE(input$header),
-        stringsAsFactors = isTRUE(input$stringsAsFactors),
+        stringsAsFactors = FALSE,
         check.names = FALSE
       ))
     }
@@ -633,8 +633,8 @@ server <- function(input, output, session) {
   eigvals <- reactive({
     X <- Xmat()
     # eigenvalues of sample covariance/correlation as appropriate
-    S <- HelperSpcaShiny::cov_R(X) 
-    ev <- sort(spca:::eigenvalues_sym(S)$values, decreasing = TRUE)
+    S <- HelperSpcaShiny:::cov_R(X) 
+    ev <- sort(spca:::eigenvalues_sym(S), decreasing = TRUE)
     ev
   })
   
@@ -711,17 +711,22 @@ server <- function(input, output, session) {
     }
     
     obj <- tryCatch({
-      spca::spca(
-        M = X,
-        n_comps = as.integer(input$ncomp),
-        alpha = input$alpha,
-        method = input$variant,
-        var_selection = input$selection,
-        objective = input$objective,
-        intensive = isTRUE(input$intensive),
-        pm_loading = isTRUE(input$pm_loading),
-        pm_varsel = isTRUE(input$pm_varsel)
-      )
+      withProgress(message = "Fitting SPCA model...", value = 0, {
+        incProgress(0.15, detail = "Preparing model")
+        ans <- spca::spca(
+          M = X,
+          n_comps = as.integer(input$ncomp),
+          alpha = input$alpha,
+          method = input$variant,
+          var_selection = input$selection,
+          objective = input$objective,
+          intensive = isTRUE(input$intensive),
+          pm_loading = isTRUE(input$pm_loading),
+          pm_varsel = isTRUE(input$pm_varsel)
+        )
+        incProgress(1, detail = "Done")
+        ans
+      })
     }, error = function(e) e)
     
     if (inherits(obj, "error")) {
@@ -759,17 +764,22 @@ server <- function(input, output, session) {
     }
     
     obj <- tryCatch({
-      spca::spca(
-        M = X,
-        n_comps = as.integer(input$compare_ncomp),
-        alpha = input$compare_alpha,
-        method = input$compare_variant,
-        var_selection = input$compare_selection,
-        objective = input$compare_objective,
-        intensive = isTRUE(input$compare_intensive),
-        pm_loading = isTRUE(input$compare_pm_loading),
-        pm_varsel = isTRUE(input$compare_pm_varsel)
-      )
+      withProgress(message = "Fitting comparison SPCA model...", value = 0, {
+        incProgress(0.15, detail = "Preparing comparison")
+        ans <- spca::spca(
+          M = X,
+          n_comps = as.integer(input$compare_ncomp),
+          alpha = input$compare_alpha,
+          method = input$compare_variant,
+          var_selection = input$compare_selection,
+          objective = input$compare_objective,
+          intensive = isTRUE(input$compare_intensive),
+          pm_loading = isTRUE(input$compare_pm_loading),
+          pm_varsel = isTRUE(input$compare_pm_varsel)
+        )
+        incProgress(1, detail = "Done")
+        ans
+      })
     }, error = function(e) e)
     
     if (inherits(obj, "error")) {

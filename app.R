@@ -164,7 +164,7 @@ ui <- page_navbar(
                width = 1,
                card(
                  class = "intro-card-welcome",
-                 card_header(tags$div(class = "spca-title-row", spca_logo_tag(), tags$span("Welcome to the web interface for spca package"))),
+                 card_header(tags$div(class = "spca-title-row", spca_logo_tag(), tags$span("The package spca and this web-interface were created by Giovanni Maria Merola"))),
 p("This app provides a graphical interface to fit Least Squares Sparse Principal Components models using the spca package."), 
 p("It is a companion app for the spca tutorial. Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."), 
 p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the article and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LSSPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and  optionally with a vector containg the scale character for each variable (csv)"),p("Use the tabs in the navigation bar to upload data, run diagnostics, fit a model, and inspect results.")

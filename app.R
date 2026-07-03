@@ -159,58 +159,79 @@ ui <- page_navbar(
   header = tags$head(tags$style(HTML(app_css))),
 #  navbar_options = navbar_options(collapsible = FALSE),
 #intro================
-  nav_panel( "Intro",
-             layout_column_wrap(
-               width = 1,
-               card(
-                 class = "intro-card-welcome",
-                 card_header(tags$div(class = "spca-title-row", spca_logo_tag(), tags$span("The package spca and this web-interface were created by Giovanni Maria Merola"))),
-p("This app provides a graphical interface to fit Least Squares Sparse Principal Components models using the spca package."), 
-p("It is a companion app for the spca tutorial. Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."), 
-p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the article and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LSSPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and  optionally with a vector containg the scale character for each variable (csv)"),p("Use the tabs in the navigation bar to upload data, run diagnostics, fit a model, and inspect results.")
-               ),
-               card(
-                 class = "intro-card-instructions",
-                 card_header("Quick instructions"),
-                 tags$ol(
-                   tags$li(tags$b("Data:"), " Upload a data file in  CSV format, and, if needed, the scales, also in CSV format, or one of the existing datasets. You can select the variables to analyze and choose centering/scaling options as needed."),
-                   tags$li(tags$b("Diagnostics:"), " Inspect the scree plot and the Wachter QQ-plot."),
-                   tags$li(tags$b("Model:"), " Choose the SPCA variant, objective, variable-selection method, power-method options, and the number of sPCs to compute, then click ", tags$code("Run"), "."),
-                   tags$li(tags$b("Results:"), " Review the summary table, plots, and download the fitted (R) object or the loadings (csv) if needed.")
-                 ),
-                 p(tags$b("Note:"), " Any non-numeric columns in the uploaded data should be excluded from the variable selection.")
-               ),
-card(card_header(
-  class = "intro-card-references",
-  "References"),
-  p(tags$b("Vignettes")),
-  p(
-    "Introductory vignette ",
-    tags$a(href = spca_doc_href("spca_intro.html"), target = "_blank", "HTML"),
-    " ",
-    tags$a(href = spca_doc_href("spca_intro.pdf"), target = "_blank", "PDF")
-  ),
-  p(
-    "Extended vignette ",
-    tags$a(href = spca_doc_href("spca_extended_vignette.html"), target = "_blank", "HTML"),
-    " ",
-    tags$a(href = spca_doc_href("spca_extended_vignette.pdf"), target = "_blank", "PDF")
-  ),
-p("Refereed articles"),
-p("Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large loadings. Australia & New Zealand Journal of Statistics, 57, 391-429.",
-  tags$a(
-    href = "https://arxiv.org/abs/1406.1381",
-    target = "_blank",
-    "Preprint")
-), 
-p("Merola, G. M. and Chen, G. (2019). Projection sparse principal component analysis: An efficient least squares method. Journal of Multivariate Analysis, 173, 366-382.",
-  tags$a(
-    href = "https://arxiv.org/abs/1612.00939",
-    target = "_blank",
-    "Preprint"))
-)
-)
-  ), #end navpanel intro
+nav_panel(
+  "Intro",
+  layout_column_wrap(
+    width = 1,
+    
+    card(
+      class = "intro-card-welcome",
+      card_header(
+        tags$div(
+          class = "spca-title-row",
+          spca_logo_tag(),
+          tags$div(
+            class = "spca-title-text",
+            tags$div("Author: Giovanni Maria Merola"),
+            tags$div(
+              "Issues and suggestions: ",
+              tags$a(
+                href = "https://github.com/merolagio/spca_shiny/issues",
+                target = "_blank",
+                "https://github.com/merolagio/spca_shiny/issues"
+              )
+            )
+          )
+        )
+      ),
+      p("This app provides a graphical interface to fit Least Squares Sparse Principal Components models using the spca package."),
+      p("It is a companion app for the spca tutorial. Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."),
+      p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the article and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LSSPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and optionally with a vector containing the scale character for each variable (csv)."),
+      p("Use the tabs in the navigation bar to upload data, run diagnostics, fit a model, and inspect results.")
+    ),
+    
+    card(
+      class = "intro-card-instructions",
+      card_header("Quick instructions"),
+      tags$ol(
+        tags$li(tags$b("Data:"), " Upload a data file in CSV format, and, if needed, the scales, also in CSV format, or one of the existing datasets. You can select the variables to analyze and choose centering/scaling options as needed."),
+        tags$li(tags$b("Diagnostics:"), " Inspect the scree plot and the Wachter QQ-plot."),
+        tags$li(tags$b("Model:"), " Choose the SPCA variant, objective, variable-selection method, power-method options, and the number of sPCs to compute, then click ", tags$code("Run"), "."),
+        tags$li(tags$b("Results:"), " Review the summary table, plots, and download the fitted (R) object or the loadings (csv) if needed.")
+      ),
+      p(tags$b("Note:"), " Any non-numeric columns in the uploaded data should be excluded from the variable selection.")
+    ),
+    
+    card(
+      card_header(
+        class = "intro-card-references",
+        "References"
+      ),
+      p(tags$b("Vignettes")),
+      p(
+        "Introductory vignette ",
+        tags$a(href = spca_doc_href("spca_intro.html"), target = "_blank", "HTML"),
+        " ",
+        tags$a(href = spca_doc_href("spca_intro.pdf"), target = "_blank", "PDF")
+      ),
+      p(
+        "Extended vignette ",
+        tags$a(href = spca_doc_href("spca_extended_vignette.html"), target = "_blank", "HTML"),
+        " ",
+        tags$a(href = spca_doc_href("spca_extended_vignette.pdf"), target = "_blank", "PDF")
+      ),
+      p(tags$b("Refereed articles")),
+      p(
+        "Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large loadings. Australia & New Zealand Journal of Statistics, 57, 391-429. ",
+        tags$a(href = "https://arxiv.org/abs/1406.1381", target = "_blank", "Preprint")
+      ),
+      p(
+        "Merola, G. M. and Chen, G. (2019). Projection sparse principal component analysis: An efficient least squares method. Journal of Multivariate Analysis, 173, 366-382. ",
+        tags$a(href = "https://arxiv.org/abs/1612.00939", target = "_blank", "Preprint")
+      )
+    )
+  )
+), #end navpanel intro
   nav_panel(
     "Data",
     layout_sidebar(

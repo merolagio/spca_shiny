@@ -1,13 +1,9 @@
-
 #=================================================P
 #COMPANION APP TO THE SPCA TUTORIAL
 #GIOVANNI M. MEROLA
 # merolagio@gmail.com
 #=================================================P
-
-
 options(shiny.maxRequestSize = 200 * 1024^2)
-
 library(shiny)
 library(bslib)
 library(DT)
@@ -15,7 +11,6 @@ library(spca)
 # ADD read scales
 # ADD plots
 # ADD variable selection choice
-
 #UI START=======================
 `%||%` <- function(x, y) {if (is.null(x)) y else x}
 vec2fac = function(v){
@@ -45,23 +40,19 @@ spca_logo_tag <- function() {
 spca_doc_href <- function(file) {
   if (dir.exists(app_docs_dir)) paste0("spca_docs/", file) else paste0("docs/", file)
 }
-
 app_css <- "
 .intro-card-welcome {
   background-color: #f4f7fb;
   border-left: 5px solid #5b7dbb;
 }
-
 .intro-card-instructions {
   background-color: #f6fbf7;
   border-left: 5px solid #4f9d69;
 }
-
 .intro-card-references {
   background-color: #fbf8f1;
   border-left: 5px solid #c9902e;
 }
-
 .intro-card-welcome .card-header,
 .intro-card-instructions .card-header,
 .intro-card-references .card-header {
@@ -284,7 +275,7 @@ nav_panel(
           "show_vars",
           "Variable selection",
           choices = c("Hide" = "hide", "Show" = "show"),
-          selected = "Hide",
+          selected = "hide",
           inline = TRUE
         ),
         
@@ -315,7 +306,6 @@ nav_panel(
       actionButton("refresh_scree", "Refresh scree plot"),
       actionButton("refresh_wachter", "Refresh Wachter QQ-plot"),
       
-
       # FIX: allow negative values (remove min = 0)
       numericInput(
         "nfit_line",
@@ -529,7 +519,6 @@ format_summary_matrix <- function(out) {
   
   fx
 }
-
 server <- function(input, output, session) {
   
   # ---------- Data ----------
@@ -588,7 +577,6 @@ server <- function(input, output, session) {
     if (!is.factor(sc)) sc <- vec2fac(sc)
     sc
   }
-
   read_package_data <- function(name, package = "spca") {
     env <- new.env(parent = emptyenv())
     utils::data(list = name, package = package, envir = env)
@@ -636,7 +624,6 @@ server <- function(input, output, session) {
   scale_present <- reactive({
     !is.null(scale_fac())
   })
-
   output$vars_ui <- renderUI({
     df <- dat()
     is_num <- vapply(df, function(z) is.numeric(z) || is.integer(z), logical(1))
@@ -695,8 +682,8 @@ server <- function(input, output, session) {
   
   output$scree <- renderPlot({
     input$refresh_scree  
+    req(eigvals())
     tryCatch({
-      req(eigvals())
     if (!requireNamespace("spca", quietly = TRUE)) {
       plot.new(); text(0.5, 0.5, "Package spca not available.")
       return()
@@ -924,7 +911,6 @@ server <- function(input, output, session) {
       compare_fit()
     }
   })
-
   compare_result <- reactive({
     req(fit(), compare_obj())
     n_compare <- min(ncol(fit()$loadings), ncol(compare_obj()$loadings))
@@ -983,7 +969,6 @@ server <- function(input, output, session) {
     req(compare_result())
     print(compare_result()$loadings_plot)
   })
-
   output$dl_compare_rds <- downloadHandler(
     filename = function() paste0("spca_comparison_fit_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".rds"),
     content = function(file) {
@@ -991,7 +976,6 @@ server <- function(input, output, session) {
       saveRDS(compare_obj(), file = file)
     }
   )
-
   output$dl_compare_loadings_csv <- downloadHandler(
     filename = function() {
       paste0("spca_comparison_loadings_", format(Sys.Date(), "%Y%m%d"), ".csv")
@@ -999,7 +983,6 @@ server <- function(input, output, session) {
     content = function(file) {
       req(compare_obj())
       obj <- compare_obj()
-
       L <- tryCatch({
         if (isS4(obj) && "loadings" %in% methods::slotNames(obj)) {
           methods::slot(obj, "loadings")
@@ -1011,11 +994,9 @@ server <- function(input, output, session) {
       }, error = function(e) {
         data.frame(Error = conditionMessage(e), stringsAsFactors = FALSE)
       })
-
       utils::write.csv(L, file = file, row.names = TRUE)
     }
   )
-
     # ---------- Results ----------
 #SUMMARY TABLE============  
   
@@ -1034,7 +1015,6 @@ server <- function(input, output, session) {
     DT::datatable(fx, options = list(pageLength = 10, scrollX = TRUE), rownames = TRUE)
   })
   # ---- Results UI helpers  
-
   output$scale_card_ui <- renderUI({
     if (!isTRUE(scale_present())) return(NULL)
     if (!identical(input$show_scale_list, "show")) return(NULL)
@@ -1181,7 +1161,6 @@ server <- function(input, output, session) {
   },
   content = function(file) {
     obj <- fit()
-
     L <- tryCatch({
       if (isS4(obj) && "loadings" %in% methods::slotNames(obj)) {
         methods::slot(obj, "loadings")
@@ -1193,13 +1172,11 @@ server <- function(input, output, session) {
     }, error = function(e) {
       data.frame(Error = conditionMessage(e), stringsAsFactors = FALSE)
     })
-
     # Write matrix/data.frame; keep rownames (variable names) if present
     utils::write.csv(L, file = file, row.names = TRUE)
   }
 )
 }
-
 shinyApp(ui, server)
 # 
 # # Run the application 

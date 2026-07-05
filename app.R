@@ -21,7 +21,7 @@ vec2fac = function(v){
   }
   factor(val, labels = u)
 }
-app_logo_file <- file.path(getwd(), "spca_Logo_bordered.png")
+app_logo_file <- file.path(getwd(), "spca_logo_octagon.png")
 if (file.exists(app_logo_file)) {
   addResourcePath("spca_assets", normalizePath(dirname(app_logo_file), winslash = "/", mustWork = TRUE))
 }
@@ -176,9 +176,7 @@ nav_panel(
         )
       ),
       p("This app provides a graphical interface to fit Least Squares Sparse Principal Components models using the spca package."),
-      p(
-        "It is a companion app for the SPCA tutorial. Functionalities are necessarily limited. ",
-        "For more functionality, you can download the ",
+      p("It is a companion app for the SPCA tutorial. Functionalities are necessarily limited. ", "For more functionalities, you can download the ",
         a("spca package from CRAN", href = "https://cran.r-project.org/package=spca", target = "_blank"),
         " or the latest development version from ",
         a("GitHub", href = "https://github.com/merolagio/spca", target = "_blank"),
@@ -186,7 +184,7 @@ nav_panel(
       ),
         
       p("Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."),
-      p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the article and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LSSPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and optionally with a vector containing the scale character for each variable (csv)."),
+      p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the extended vignette and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LS-SPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and optionally with a vector containing the scale character for each variable (csv)."),
       p("Use the tabs in the navigation bar to upload data, run diagnostics, fit a model, and inspect results.")
     ),
     
@@ -199,7 +197,8 @@ nav_panel(
         tags$li(tags$b("Model:"), " Choose the SPCA variant, objective, variable-selection method, power-method options, and the number of sPCs to compute, then click ", tags$code("Run"), "."),
         tags$li(tags$b("Results:"), " Review the summary table, plots, and download the fitted (R) object or the loadings (csv) if needed.")
       ),
-      p(tags$b("Note:"), " Any non-numeric columns in the uploaded data should be excluded from the variable selection.")
+      tags$li(tags$b("Compare:"), " Fit a different LS-SPCA model and compare results with the previous one. Or you can upload a matrix of loadings (csv) obtained outside the spca package and compare its performance with an LS-spca solution."),
+    p(tags$b("Note:"), " Any non-numeric columns in the uploaded data should be excluded from the variable selection.")
     ),
     
     card(

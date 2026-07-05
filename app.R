@@ -176,7 +176,16 @@ nav_panel(
         )
       ),
       p("This app provides a graphical interface to fit Least Squares Sparse Principal Components models using the spca package."),
-      p("It is a companion app for the spca tutorial. Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."),
+      p(
+        "It is a companion app for the SPCA tutorial. Functionalities are necessarily limited. ",
+        "For more functionality, you can download the ",
+        a("spca package from CRAN", href = "https://cran.r-project.org/package=spca", target = "_blank"),
+        " or the latest development version from ",
+        a("GitHub", href = "https://github.com/YOUR-USERNAME/spca", target = "_blank"),
+        "."
+      ),
+        
+      p("Some settings can be slow on large or wide data matrices, especially backward/stepwise variable selection, CVEXP objectives, and exact eigen-computations."),
       p("There are three datasets available: MSSCQ, Crime and Holzinger. The first two are used in the article and computing the sPCs is slow. Holzinger has only 12 variables and 144 observations, so it can be used to explore LSSPCA solutions. There is also the possibility to upload your own dataset (csv with only numerical values) and optionally with a vector containing the scale character for each variable (csv)."),
       p("Use the tabs in the navigation bar to upload data, run diagnostics, fit a model, and inspect results.")
     ),

@@ -181,7 +181,7 @@ nav_panel(
         "For more functionality, you can download the ",
         a("spca package from CRAN", href = "https://cran.r-project.org/package=spca", target = "_blank"),
         " or the latest development version from ",
-        a("GitHub", href = "https://github.com/YOUR-USERNAME/spca", target = "_blank"),
+        a("GitHub", href = "https://github.com/merolagio/spca", target = "_blank"),
         "."
       ),
         

@@ -397,6 +397,7 @@ nav_panel("Results",
             )
           )
 ),
+#Comaparison
 nav_panel("Compare",
   layout_sidebar(
     sidebar = sidebar(
@@ -414,7 +415,7 @@ nav_panel("Compare",
         selectInput(
           "compare_variant", "Variant",
           choices = c("cSPCA" = "cspca", "uSPCA" = "uspca", "pSPCA" = "pspca"),
-          selected = "cspca"
+          selected = "pspca"
         ),
         selectInput(
           "compare_selection", "Variable selection",
@@ -431,7 +432,8 @@ nav_panel("Compare",
         checkboxInput("compare_pm_varsel", "Power method inside variable selection", FALSE),
         numericInput("compare_ncomp", "Components", value = 4, min = 1, step = 1),
         numericInput("compare_alpha", "Target recovered variance (alpha)", value = 0.95, min = 0.50, max = 0.999, step = 0.01),
-        actionButton("compare_run", "Run comparison model", class = "btn-primary")
+        actionButton("compare_run", "Run comparison model", class = "btn-primary"),
+        checkboxInput("show_names", "Show variable names in plot", FALSE)
       ),
       conditionalPanel(
         condition = "input.compare_source == 'manual'",
@@ -936,6 +938,7 @@ server <- function(input, output, session) {
       plot_loadings = TRUE,
       plot_type = input$plot_type %||% "bars",
       methods_names = c("Main fit", "Comparison"),
+      x_axis_var_names = isTRUE(input$show_names),
       color_scale = input$color_scale %||% "ggplot",
       print_loadings = FALSE,
       return_tables = TRUE,

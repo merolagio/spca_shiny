@@ -1803,13 +1803,13 @@
   },
   "files": {
     ".RData": {
-      "checksum": "943be05a7db79f341a62defe53ce69d9"
+      "checksum": "d439797e4cd66e27c74c40b8069680ed"
     },
     ".Rprofile": {
-      "checksum": "6ccdc9eda5941fb0a86f5ea3591dda60"
+      "checksum": "03b914df5f9615270ad5d18ac176a111"
     },
     "app.R": {
-      "checksum": "f90083ff1f6eb9a0580053d7cf292d4a"
+      "checksum": "0afd215fe9fec38dac741795b479b674"
     },
     "data/crime.rds": {
       "checksum": "76e8d845337b72e8862ea2ed1ed271cd"
@@ -1841,8 +1841,8 @@
     "renv.lock": {
       "checksum": "53e121e7f85ec77893acd632b51f0c1b"
     },
-    "spca_Logo_bordered.png": {
-      "checksum": "126d9a2980d6338590986aff00cbcdd1"
+    "spca_logo_octagon.png": {
+      "checksum": "e7fd7b4d9dfb2632623ebad9f0a94132"
     }
   },
   "users": null

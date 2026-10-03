@@ -1,0 +1,3001 @@
+<!DOCTYPE html><html lang="en"><head><title>Help for package spca</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script>
+const macros = { "\\R": "\\textsf{R}", "\\mbox": "\\text", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="../../../resources/R-nav.css">
+</head><body><div class="container"><h1>Package {spca}</h1><hr><nav class="package" aria-label="Topic Navigation">
+<div class="dropdown-menu">
+<img class="toplogo" src="../../../resources/Rlogo.svg" alt="[logo]">
+<h2>Contents</h2>
+<ul class="menu">
+<li><a href='#spca-package'>spca-package</a></li>
+<li><a href='#aggregate_by_group'>aggregate_by_group</a></li>
+<li><a href='#change_loadings_sign_spca'>change_loadings_sign_spca</a></li>
+<li><a href='#change_sign'>change_sign</a></li>
+<li><a href='#change_weights_sign_spca'>change_weights_sign_spca</a></li>
+<li><a href='#compare_spca'>compare_spca</a></li>
+<li><a href='#holzinger'>holzinger</a></li>
+<li><a href='#holzinger_scales'>holzinger_scales</a></li>
+<li><a href='#is.pca'>is.pca</a></li>
+<li><a href='#is.spca'>is.spca</a></li>
+<li><a href='#mp_qqplot'>mp_qqplot</a></li>
+<li><a href='#new_spca'>new_spca</a></li>
+<li><a href='#pca'>pca</a></li>
+<li><a href='#plot.pca'>plot.pca</a></li>
+<li><a href='#print.pca'>print.pca</a></li>
+<li><a href='#scree_plot'>scree_plot</a></li>
+<li><a href='#show_contributions_spca'>show_contributions_spca</a></li>
+<li><a href='#show_correlations'>show_correlations</a></li>
+<li><a href='#show_weights'>show_weights</a></li>
+<li><a href='#spca'>spca</a></li>
+<li><a href='#spca_object'>spca_object</a></li>
+<li><a href='#spca_screeplot'>spca_screeplot</a></li>
+<li><a href='#summary.pca'>summary.pca</a></li>
+<li><a href='#wachter_qqplot'>wachter_qqplot</a></li>
+</ul>
+</div>
+<hr>
+</nav>
+<main>
+<table role='presentation'>
+<tr>
+<td>Type:</td>
+<td>Package</td>
+</tr>
+<tr>
+<td>Title:</td>
+<td>Least Squares Sparse Principal Components Analysis</td>
+</tr>
+<tr>
+<td>Version:</td>
+<td>1.1.4</td>
+</tr>
+<tr>
+<td>Date:</td>
+<td>2026-09-23</td>
+</tr>
+<tr>
+<td>Description:</td>
+<td>Implements least-squares sparse principal component analysis with cardinality constraints. The package has an efficient C++ backend and provides functions for fitting, summarizing, comparing, and visualizing sparse principal component models. The approach follows Merola (2015) &lt;<a href="https://doi.org/10.1111%2Fanzs.12128">doi:10.1111/anzs.12128</a>&gt; and Merola and Chen (2019) &lt;<a href="https://doi.org/10.1016%2Fj.jmva.2019.04.001">doi:10.1016/j.jmva.2019.04.001</a>&gt;. </td>
+</tr>
+<tr>
+<td>Maintainer:</td>
+<td>Giovanni Maria Merola &lt;merolagio@gmail.com&gt;</td>
+</tr>
+<tr>
+<td>URL:</td>
+<td><a href="https://github.com/merolagio/spca">https://github.com/merolagio/spca</a></td>
+</tr>
+<tr>
+<td>BugReports:</td>
+<td><a href="https://github.com/merolagio/spca/issues">https://github.com/merolagio/spca/issues</a></td>
+</tr>
+<tr>
+<td>License:</td>
+<td><a href="https://www.r-project.org/Licenses/AGPL-3">AGPL-3</a></td>
+</tr>
+<tr>
+<td>Encoding:</td>
+<td>UTF-8</td>
+</tr>
+<tr>
+<td>Depends:</td>
+<td>R (&ge; 4.3)</td>
+</tr>
+<tr>
+<td>Imports:</td>
+<td>Rcpp (&ge; 1.0.14), ggplot2 (&ge; 4.0.0), RMTstat (&ge; 0.3.1),
+scales, rlang</td>
+</tr>
+<tr>
+<td>Suggests:</td>
+<td>testthat (&ge; 3.0.0), peakRAM (&ge; 1.0.2), knitr, rmarkdown</td>
+</tr>
+<tr>
+<td>VignetteBuilder:</td>
+<td>knitr</td>
+</tr>
+<tr>
+<td>Config/testthat/edition:</td>
+<td>3</td>
+</tr>
+<tr>
+<td>LinkingTo:</td>
+<td>Rcpp, RcppEigen</td>
+</tr>
+<tr>
+<td>RoxygenNote:</td>
+<td>7.3.2</td>
+</tr>
+<tr>
+<td>LazyData:</td>
+<td>true</td>
+</tr>
+<tr>
+<td>NeedsCompilation:</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Packaged:</td>
+<td>2026-09-23 05:49:31 UTC; merol</td>
+</tr>
+<tr>
+<td>Author:</td>
+<td>Giovanni Maria Merola [aut, cre]</td>
+</tr>
+<tr>
+<td>Repository:</td>
+<td>CRAN</td>
+</tr>
+<tr>
+<td>Date/Publication:</td>
+<td>2026-09-23 09:20:02 UTC</td>
+</tr>
+</table>
+<hr><span id='rdfile+spca-package'></span>
+<h2 id='spca-package'>Least Squares Sparse Principal Components Analysis</h2><span id='topic+spca-package'></span>
+
+<h3>Description</h3>
+
+<p>The package provides functions to compute LS-SPCA solutions, in which
+sparsity is imposed on Pearson PCA's least-squares reconstruction objective.
+</p>
+
+
+<h3>Details</h3>
+
+<p>LS-SPCA differs from SPCA methods that compute sparse PCs by maximizing
+variance. Details are provided in the references below and in the extended
+vignette.
+</p>
+<p>This release accompanies the related article and supports reproduction of
+the results reported therein.
+</p>
+<p>Computation relies on efficient C++ routines and includes multiple options
+for variable selection and sparse weight estimation.
+</p>
+<p><strong>Fitting functions</strong>
+</p>
+
+<ul>
+<li> <p><code><a href="#topic+spca">spca()</a></code> Computes LS-SPCA solutions from a data or covariance/correlation
+matrix. It returns a <a href="#topic+spca_object">spca_object</a> of class <code>spca</code>.
+</p>
+</li>
+<li> <p><code><a href="#topic+pca">pca()</a></code> Computes PCA solutions from a data or covariance/correlation
+matrix. It returns a <a href="#topic+spca_object">spca_object</a> inheriting from classes <code>spca_pca</code>
+and <code>spca</code>.
+</p>
+</li></ul>
+
+<p><strong>Methods</strong>
+</p>
+
+<ul>
+<li> <p><code><a href="../../../../doc/manuals/r-patched/packages/base/refman/base.html#topic+print">print()</a></code>, <code><a href="../../../../doc/manuals/r-patched/packages/base/refman/base.html#topic+summary">summary()</a></code>, and <code><a href="../../../../doc/manuals/r-patched/packages/base/refman/base.html#topic+plot">plot()</a></code> inspect and display <code>spca</code> objects.
+</p>
+</li>
+<li> <p><code><a href="#topic+change_sign">change_sign()</a></code> changes the signs of selected components and their related
+object elements.
+</p>
+</li>
+<li> <p><code><a href="#topic+show_weights">show_weights()</a></code> prints or returns the nonzero weights or contributions for
+selected components.
+</p>
+</li>
+<li> <p><code><a href="#topic+aggregate_by_group">aggregate_by_group()</a></code> aggregates weights or contributions according to a
+grouping vector.
+</p>
+</li>
+<li> <p><code><a href="#topic+scree_plot">scree_plot()</a></code> and <code><a href="#topic+mp_qqplot">mp_qqplot()</a></code> provide diagnostic plots for objects
+returned by <code><a href="#topic+pca">pca()</a></code>.
+</p>
+</li></ul>
+
+<p><strong>Utilities</strong>
+</p>
+
+<ul>
+<li> <p><code><a href="#topic+is.spca">is.spca()</a></code> Verifies whether an object is a proper <code>spca</code> object.
+</p>
+</li>
+<li> <p><code><a href="#topic+is.pca">is.pca()</a></code> Verifies whether an object is a proper <code>pca</code> object.
+</p>
+</li>
+<li> <p><code><a href="#topic+compare_spca">compare_spca()</a></code> Compares two or more LS-SPCA solutions numerically
+and visually.
+</p>
+</li>
+<li> <p><code><a href="#topic+new_spca">new_spca()</a></code> Creates an <code>spca</code> object from a set of weights.
+</p>
+</li></ul>
+
+<p>The former interfaces <code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca()</a></code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca()</a></code>, <code><a href="#topic+spca_screeplot">spca_screeplot()</a></code>, and <code><a href="#topic+wachter_qqplot">wachter_qqplot()</a></code> are
+retained for backward compatibility and issue deprecation warnings. Objects
+created by previous package versions with <code>loadings</code> and <code>loadings_list</code>
+elements remain supported.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p><strong>Maintainer</strong>: Giovanni Maria Merola <a href="mailto:merolagio@gmail.com">merolagio@gmail.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Merola, G. M. (2015). Least Squares Sparse Principal Component Analysis:
+a Backward Elimination approach to attain large weights.
+<em>Australia &amp; New Zealand Journal of Statistics</em>, 57, 391&ndash;429.
+<a href="https://doi.org/10.1111/anzs.12128">doi:10.1111/anzs.12128</a>
+</p>
+<p>Merola, G. M. and Chen, G. (2019). Projection sparse principal component
+analysis: An efficient least squares method. <em>Journal of Multivariate
+Analysis</em>, 173, 366&ndash;382. <a href="https://doi.org/10.1016/j.jmva.2019.04.001">doi:10.1016/j.jmva.2019.04.001</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Useful links:
+</p>
+
+<ul>
+<li> <p><a href="https://github.com/merolagio/spca">https://github.com/merolagio/spca</a>
+</p>
+</li>
+<li><p> Report bugs at <a href="https://github.com/merolagio/spca/issues">https://github.com/merolagio/spca/issues</a>
+</p>
+</li></ul>
+
+
+<hr><span id='rdfile+aggregate_by_group'></span>
+<h2 id='aggregate_by_group'>Aggregate Weights or Contributions of a <code>pca</code> or <code>spca</code> Object by Group</h2><span id='topic+aggregate_by_group'></span><span id='topic+aggregate_by_group.spca'></span><span id='topic+aggregate_by_group.pca'></span>
+
+<h3>Description</h3>
+
+<p>Aggregate component weights or contributions according to a grouping
+variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>aggregate_by_group(
+  object,
+  variable_groups,
+  cols = NULL,
+  only_nonzero = TRUE,
+  contributions = TRUE,
+  digits = ifelse(contributions, 1, 3),
+  print_table = TRUE,
+  return_table = FALSE,
+  spca_obj = NULL
+)
+
+## S3 method for class 'spca'
+aggregate_by_group(
+  object,
+  variable_groups,
+  cols = NULL,
+  only_nonzero = TRUE,
+  contributions = TRUE,
+  digits = ifelse(contributions, 1, 3),
+  print_table = TRUE,
+  return_table = FALSE,
+  spca_obj = NULL
+)
+
+## S3 method for class 'pca'
+aggregate_by_group(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="aggregate_by_group_+3A_object">object</code></td>
+<td>
+<p>An object of class <code>pca</code> or <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_variable_groups">variable_groups</code></td>
+<td>
+<p>A vector or factor with one group label per variable.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_cols">cols</code></td>
+<td>
+<p>An integer vector selecting components. If a single positive
+integer is supplied, components <code>1:cols</code> are included.
+If <code>NULL</code>, all components are included.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_only_nonzero">only_nonzero</code></td>
+<td>
+<p>A logical value indicating whether to omit
+variable_groups whose
+values are zero in every selected component.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_contributions">contributions</code></td>
+<td>
+<p>A logical value. If <code>TRUE</code>, aggregate percentage
+contributions; otherwise, aggregate weights.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_digits">digits</code></td>
+<td>
+<p>Number of digits used in printed output.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_print_table">print_table</code></td>
+<td>
+<p>A logical value indicating whether to print the table.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_return_table">return_table</code></td>
+<td>
+<p>A logical value indicating whether to return the table
+visibly.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>Deprecated alias for <code>object</code> (default <code>NULL</code>).
+Supply only one of <code>object</code> and <code>spca_obj</code>. Using the old
+argument name issues a warning.</p>
+</td></tr>
+<tr><td><code id="aggregate_by_group_+3A_...">...</code></td>
+<td>
+<p>Additional arguments passed to <code>aggregate_by_group.spca</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>aggregate_by_group(pca)</code>: Aggregate a <code>pca</code> object by group.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other pca: 
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+<hr><span id='rdfile+change_loadings_sign_spca'></span>
+<h2 id='change_loadings_sign_spca'>Change Component Signs in an SPCA Object (Deprecated Alias)</h2><span id='topic+change_loadings_sign_spca'></span>
+
+<h3>Description</h3>
+
+<p><code>change_loadings_sign_spca()</code> is retained for backward compatibility.
+Use <code><a href="#topic+change_sign">change_sign()</a></code> in new code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>change_loadings_sign_spca(spca_obj, index_to_change)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="change_loadings_sign_spca_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>An object of class <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="change_loadings_sign_spca_+3A_index_to_change">index_to_change</code></td>
+<td>
+<p>An integer vector of component indices whose signs
+should be changed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The modified <code>spca_obj</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+<hr><span id='rdfile+change_sign'></span>
+<h2 id='change_sign'>Change Component Signs in a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+change_sign'></span><span id='topic+change_sign.spca'></span><span id='topic+change_sign.pca'></span>
+
+<h3>Description</h3>
+
+<p>Change the signs of selected Weights in a fitted object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>change_sign(object, index_to_change, spca_obj = NULL)
+
+## S3 method for class 'spca'
+change_sign(object, index_to_change, spca_obj = NULL)
+
+## S3 method for class 'pca'
+change_sign(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="change_sign_+3A_object">object</code></td>
+<td>
+<p>An object of class <code>pca</code> or <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="change_sign_+3A_index_to_change">index_to_change</code></td>
+<td>
+<p>An integer vector of component indices whose signs
+should be changed.</p>
+</td></tr>
+<tr><td><code id="change_sign_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>Deprecated alias for <code>object</code> (default <code>NULL</code>).
+Supply only one of <code>object</code> and <code>spca_obj</code>. Using the old
+argument name issues a warning.</p>
+</td></tr>
+<tr><td><code id="change_sign_+3A_...">...</code></td>
+<td>
+<p>Additional arguments passed to <code>change_sign.spca</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The modified object, preserving its classes.
+</p>
+
+
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>change_sign(pca)</code>: Change component signs in a <code>pca</code> object.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 4)
+show_correlations(ho_cspca) 
+# In applications we would change only the fourth set of weights
+ho_changed = change_sign(ho_cspca, index_to_change = c(2, 4))
+is.spca(ho_changed)
+show_weights(ho_cspca, cols = 2)
+show_weights(ho_changed, cols = 2)
+show_correlations(ho_changed) 
+</code></pre>
+
+<hr><span id='rdfile+change_weights_sign_spca'></span>
+<h2 id='change_weights_sign_spca'>Change Component Signs in an SPCA Object (Deprecated Alias)</h2><span id='topic+change_weights_sign_spca'></span>
+
+<h3>Description</h3>
+
+<p><code>change_weights_sign_spca()</code> is retained for backward compatibility.
+Use <code><a href="#topic+change_sign">change_sign()</a></code> in new code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>change_weights_sign_spca(spca_obj, index_to_change)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="change_weights_sign_spca_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>An object of class <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="change_weights_sign_spca_+3A_index_to_change">index_to_change</code></td>
+<td>
+<p>An integer vector of component indices whose signs
+should be changed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The modified <code>spca_obj</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+<hr><span id='rdfile+compare_spca'></span>
+<h2 id='compare_spca'>Compare Two or More <code>spca</code> Solutions</h2><span id='topic+compare_spca'></span>
+
+<h3>Description</h3>
+
+<p>Plots weights and print summary statistics for two or more <code>spca</code>
+objects side by side. For the meaning of each summary statistic, see
+<code><a href="#topic+summary.spca">summary.spca</a></code>. Tables and plots can optionally be returned.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>compare_spca(
+  obj_list,
+  n_comps = NULL,
+  contributions = TRUE,
+  only_nonzero = TRUE,
+  variable_groups = NULL,
+  plot_weights = TRUE,
+  plot_type = c("bars", "points"),
+  methods_names = NULL,
+  x_axis_var_names = FALSE,
+  col_grouplines = "black",
+  color_scale = c("ggplot", "cbb", "printsafe", "bw"),
+  col_short_names = TRUE,
+  print_tables = TRUE,
+  print_weights = FALSE,
+  print_summary = TRUE,
+  show_plot = TRUE,
+  return_tables = FALSE,
+  return_plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="compare_spca_+3A_obj_list">obj_list</code></td>
+<td>
+<p>A list of two or more <code>spca</code> objects.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_n_comps">n_comps</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>).
+Number of components to compare. If <code>NULL</code>, the minimum number of
+available components across objects is used.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_contributions">contributions</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+compare percentage contributions; otherwise, compare weights.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_only_nonzero">only_nonzero</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+only variables with at least one nonzero weight or contribution are
+plotted or printed.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_variable_groups">variable_groups</code></td>
+<td>
+<p>Optional variable grouping (default <code>NULL</code>). Can
+be a list of indices, a vector, or a factor with one entry per variable.
+Used to draw vertical group-separating lines in the weights plot.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_plot_weights">plot_weights</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+plot the weights or contributions.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_plot_type">plot_type</code></td>
+<td>
+<p>A character vector (default first element <code>"bars"</code>).
+Values starting with <code>"b"</code> use bars; values starting with
+<code>"p"</code> use points. Other values default to bars.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_methods_names">methods_names</code></td>
+<td>
+<p>An optional character vector (default <code>NULL</code>)
+with one label per object. If <code>NULL</code>, labels are
+<code>M1</code>, ..., <code>Mk</code>.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_x_axis_var_names">x_axis_var_names</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If
+<code>TRUE</code>, show variable names on the x axis of the weights plot.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_col_grouplines">col_grouplines</code></td>
+<td>
+<p>A character scalar (default <code>"black"</code>). Color of
+the vertical group lines.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_color_scale">color_scale</code></td>
+<td>
+<p>A character vector (default first element
+<code>"ggplot"</code>). Color palette for bar plots. Accepted values are
+<code>"ggplot"</code>, <code>"cbb"</code>, <code>"printsafe"</code>, and <code>"bw"</code>.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_col_short_names">col_short_names</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+use short component names such as <code>C1.M1</code>; otherwise, use names such
+as <code>C1.object_name</code>.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_print_tables">print_tables</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>FALSE</code>,
+suppress all table printing. Takes priority over <code>print_weights</code>
+and <code>print_summary</code>.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_print_weights">print_weights</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+print the weights or contributions table.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_print_summary">print_summary</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+print the summary statistics table when <code>print_tables = TRUE</code>.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>, show
+the weights or contributions plot.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_return_tables">return_tables</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+return the weights or contributions matrix and the raw summary matrix.</p>
+</td></tr>
+<tr><td><code id="compare_spca_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+return the weights or contributions plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Invisibly returns <code>NULL</code> by default. If
+<code>return_tables = TRUE</code>, returns a list containing the comparison
+matrix and summary matrix. If <code>return_plot = TRUE</code>, the returned
+object also includes the weights or contributions plot.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_uspca = spca(holzinger, n_comps = 4, method = "u")
+ho_cspca = spca(holzinger, n_comps = 4, method = "c")
+compare_spca(list(ho_uspca, ho_cspca))
+
+</code></pre>
+
+<hr><span id='rdfile+holzinger'></span>
+<h2 id='holzinger'>Holzinger&ndash;Swineford Student Ability Data</h2><span id='topic+holzinger'></span>
+
+<h3>Description</h3>
+
+<p>This dataset is based on the classic Holzinger and Swineford (1939) Student
+Ability dataset.
+</p>
+<p>We use the version distributed with the <code>psychTools</code> package. For
+comparability with previous analyses, we select 12 items and only students
+from the Grant&ndash;White School (see also Ferrara, Martella, and Vichi, 2019).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>holzinger
+</code></pre>
+
+
+<h3>Format</h3>
+
+
+<dl>
+<dt>holzinger</dt><dd><p>A numeric data frame with 145 rows and 12 variables.
+The variables are:</p>
+</dd>
+</dl>
+
+
+<dl>
+<dt>visual</dt><dd><p>Visual perception test (SPL).</p>
+</dd>
+<dt>cubes</dt><dd><p>Cubes test (SPL).</p>
+</dd>
+<dt>flags</dt><dd><p>Lozenges test (SPL).</p>
+</dd>
+<dt>paragraph</dt><dd><p>Paragraph comprehension test (VBL).</p>
+</dd>
+<dt>sentence</dt><dd><p>Sentence completion test (VBL).</p>
+</dd>
+<dt>wordm</dt><dd><p>Word meaning test (VBL).</p>
+</dd>
+<dt>addition</dt><dd><p>Addition test (SPD).</p>
+</dd>
+<dt>counting</dt><dd><p>Counting groups of dots test (SPD).</p>
+</dd>
+<dt>straight</dt><dd><p>Straight and curved capitals test (SPD).</p>
+</dd>
+<dt>deduct</dt><dd><p>Deduction test (MTH).</p>
+</dd>
+<dt>numeric</dt><dd><p>Numerical puzzles test (MTH).</p>
+</dd>
+<dt>series</dt><dd><p>Series completion test (MTH).</p>
+</dd>
+</dl>
+
+
+
+<h3>Details</h3>
+
+<p>The 12 items correspond to four ability scales:
+spatial (SPL), verbal (VBL), speed (SPD), and mathematical (MTH).
+The data provided with this package are scaled to mean zero and unit
+variance. The scales are available as a factor called <code>holzinger_scales</code>
+</p>
+
+
+<h3>References</h3>
+
+<p>Holzinger, K. J., and Swineford, F. (1939). <em>A study in factor analysis:
+The stability of a bi-factor solution</em>.
+Supplementary Educational Monographs, No. 48.
+</p>
+<p>Ferrara, C., Martella, F., and Vichi, M. (2019). Probabilistic disjoint
+principal component analysis.
+<em>Multivariate Behavioral Research</em>, 54(1), 47&ndash;61.
+</p>
+
+<hr><span id='rdfile+holzinger_scales'></span>
+<h2 id='holzinger_scales'>Holzinger&ndash;Swineford Student Ability Scales</h2><span id='topic+holzinger_scales'></span>
+
+<h3>Description</h3>
+
+<p>Holzinger&ndash;Swineford Student Ability Scales
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>holzinger_scales
+</code></pre>
+
+
+<h3>Format</h3>
+
+
+<dl>
+<dt>holzinger_scales</dt><dd><p>A factor listing the 4 scales: SPL, VBL, SPD and MTH,
+for each variable.</p>
+</dd>
+</dl>
+
+
+<hr><span id='rdfile+is.pca'></span>
+<h2 id='is.pca'>Test for PCA Objects</h2><span id='topic+is.pca'></span>
+
+<h3>Description</h3>
+
+<p>Check whether an object has class <code>pca</code> and contains the core
+elements produced by <code>pca()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>is.pca(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="is.pca_+3A_x">x</code></td>
+<td>
+<p>An object to test.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Performs a lightweight check of the class and the presence of
+core elements. It does not validate their values or dimensions.
+Scores and the number of observations are not required because they
+may be unavailable for covariance-matrix input.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A logical value: <code>TRUE</code> if the required class and core
+elements are present, and <code>FALSE</code> otherwise.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_pca = pca(holzinger, n_comps = 2, screeplot = FALSE, qq_plot = FALSE)
+is.pca(ho_pca)
+</code></pre>
+
+<hr><span id='rdfile+is.spca'></span>
+<h2 id='is.spca'>Test for SPCA Objects</h2><span id='topic+is.spca'></span>
+
+<h3>Description</h3>
+
+<p>Check whether an object has class <code>spca</code> and contains the core elements
+required by the package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>is.spca(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="is.spca_+3A_x">x</code></td>
+<td>
+<p>An object to test.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The function checks for class <code>spca</code> and for the presence of
+the core elements used by the package, including weights, contributions,
+explained-variance summaries, component counts, cardinalities, weight lists,
+and active indices. It performs a lightweight structural check; use
+<code>validate_spca()</code> for a more detailed internal validation.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A logical value. Returns <code>TRUE</code> if <code>x</code> has class
+<code>spca</code> and contains the required core elements, and <code>FALSE</code>
+otherwise.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 2)
+is.spca(ho_cspca)
+
+</code></pre>
+
+<hr><span id='rdfile+mp_qqplot'></span>
+<h2 id='mp_qqplot'>PCA Diagnostic qqplot</h2><span id='topic+mp_qqplot'></span><span id='topic+mp_qqplot.pca'></span>
+
+<h3>Description</h3>
+
+<p>Produce a qq-plot comparing the eigenvalues of a fitted PCA with
+Marchenko&ndash;Pastur theoretical quantiles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>mp_qqplot(
+  pca_fit,
+  n_vars = NULL,
+  n_obs = NULL,
+  gamma = NULL,
+  cor = TRUE,
+  common_var = NULL,
+  n_plot = NULL,
+  n_fitline = NULL,
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+
+## S3 method for class 'pca'
+mp_qqplot(
+  pca_fit,
+  n_vars = NULL,
+  n_obs = NULL,
+  gamma = NULL,
+  cor = TRUE,
+  common_var = NULL,
+  n_plot = NULL,
+  n_fitline = NULL,
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="mp_qqplot_+3A_pca_fit">pca_fit</code></td>
+<td>
+<p>An object of class <code>"pca"</code>, as returned by <code><a href="#topic+pca">pca()</a></code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_n_vars">n_vars</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+variables. If <code>NULL</code>,
+obtain it from the number of rows of <code>pca_fit$weights</code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_n_obs">n_obs</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+observations. If <code>NULL</code>,
+obtain it from <code>pca_fit$n_obs</code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_gamma">gamma</code></td>
+<td>
+<p>A positive numeric scalar or <code>NULL</code> (default <code>NULL</code>).
+Ratio of observations to variables. If <code>NULL</code>,
+use <code>n_obs / n_vars</code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_cor">cor</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). If <code>TRUE</code>, use the
+correlation-matrix reference: set <code>common_var = 1</code> and scale the
+theoretical quantiles to sum to <code>n_vars</code>. If <code>FALSE</code>, retain the
+covariance scale specified by <code>common_var</code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_common_var">common_var</code></td>
+<td>
+<p>A positive numeric scalar or <code>NULL</code> (default <code>NULL</code>).
+Assumed common population variance for the Marchenko&ndash;Pastur quantiles.
+Required when <code>cor = FALSE</code>; set to 1 when <code>cor = TRUE</code>.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_n_plot">n_plot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+leading eigenvalues. If <code>NULL</code>, use all stored or supplied eigenvalues.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_n_fitline">n_fitline</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>: no line).
+Zero also omits the line. If positive, fit a line using
+the last <code>n_fitline</code> points. If negative, exclude the largest
+<code>abs(n_fitline)</code> points.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_addtitle">addtitle</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Add a title.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Print the plot.</p>
+</td></tr>
+<tr><td><code id="mp_qqplot_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical scalar (default <code>FALSE</code>). Return the plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This diagnostic relies on Marchenko&ndash;Pastur theory for the null
+eigenvalue distribution of a (possibly high-dimensional) sample
+covariance matrix, and is therefore only meaningful for objects of
+class <code>"pca"</code> (i.e. objects returned by <code><a href="#topic+pca">pca()</a></code>). It does not apply
+to sparse fits returned by <code><a href="#topic+spca">spca()</a></code> (class <code>"spca"</code>), for which the
+reference distribution does not hold; no method is defined for that
+class, so calling it on such an object raises the standard
+&quot;no applicable method&quot; error rather than producing a plot.
+</p>
+<p>The Marchenko&ndash;Pastur distribution depends on the ratio of variables to
+observations. The <code>gamma</code> argument uses its reciprocal, <code>n_obs / n_vars</code>,
+as required by <code>RMTstat::qmp</code>. Both counts must be available, even when
+<code>gamma</code> is supplied. The covariance reference assumes independent
+variables with a common population variance.
+With <code>cor = TRUE</code>, the theoretical quantiles are scaled to sum to
+<code>n_vars</code>. A warning is issued if the stored eigenvalues do not sum to
+<code>n_vars</code> within a tolerance of <code>1e-8 * n_vars</code>. This check assumes that
+all nonzero eigenvalues are stored; it does not establish that the
+original matrix is a correlation matrix.
+With <code>cor = FALSE</code>, the quantiles retain the scale set by <code>common_var</code>.
+A fitted line must use at least two of the plotted points.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_plot = TRUE</code>, a <code>ggplot</code> object; otherwise <code>NULL</code>
+invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_pca = pca(holzinger)
+# from the screeplot we may choose to retain 4 components
+# produce a Wachter qqplot fitting a line to all but the largest 
+# 4 eigenvalues. 
+# Since pca was fitted using the data matrix, the fit carries the number 
+# of observations. Otherwise we would need to pass `n_obs` .
+mp_qqplot(ho_pca, n_fitline = -4)
+# The qq-plot indicates that the 4th eigenvalue is compatible 
+# with that of a random matrix. 
+
+</code></pre>
+
+<hr><span id='rdfile+new_spca'></span>
+<h2 id='new_spca'>Construct an SPCA Object from a Set of Weights</h2><span id='topic+new_spca'></span>
+
+<h3>Description</h3>
+
+<p>Build an object of class <code>spca</code> from a weights matrix and either a
+covariance or correlation matrix, a data matrix, or both.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>new_spca(A, S = NULL, X = NULL, method_name = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="new_spca_+3A_A">A</code></td>
+<td>
+<p>A numeric matrix of weights.</p>
+</td></tr>
+<tr><td><code id="new_spca_+3A_S">S</code></td>
+<td>
+<p>A numeric covariance or correlation matrix (default <code>NULL</code>).
+If <code>NULL</code>, <code>X</code> is used to estimate the covariance matrix.</p>
+</td></tr>
+<tr><td><code id="new_spca_+3A_X">X</code></td>
+<td>
+<p>A numeric data matrix or data frame (default <code>NULL</code>). Used to
+compute <code>S</code> when <code>S = NULL</code>, and to compute scores when supplied.
+At least one of <code>S</code> or <code>X</code> must be provided.</p>
+</td></tr>
+<tr><td><code id="new_spca_+3A_method_name">method_name</code></td>
+<td>
+<p>A character scalar or <code>NULL</code> (default <code>NULL</code>).
+Name of the method used to compute the weights.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An <code>spca</code> object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>set.seed(1)
+A = round(matrix(runif(24, -1, 1), 12))
+A[abs(A) &lt; 0.4] = 0 #no need to scale to unit norm
+data(holzinger)
+spca_new = new_spca(A, X = holzinger)
+is.spca(spca_new)
+summary(spca_new)
+
+</code></pre>
+
+<hr><span id='rdfile+pca'></span>
+<h2 id='pca'>Computes Principal Components</h2><span id='topic+pca'></span>
+
+<h3>Description</h3>
+
+<p>Compute a principal component analysis (PCA) and return the result as an
+<code>spca</code> object, so that it can be used with <code>spca</code> methods.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>pca(
+  M,
+  n_comps = NULL,
+  center_data = FALSE,
+  scale_data = FALSE,
+  fat_matrix = NULL,
+  screeplot = TRUE,
+  qq_plot = FALSE,
+  n_obs = NULL,
+  neigen_toplot = NULL,
+  cor = TRUE,
+  common_var = NULL,
+  pm = FALSE,
+  eps_pm = 1e-04,
+  maxiter_pm = 1000
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="pca_+3A_M">M</code></td>
+<td>
+<p>A data matrix, correlation matrix, or covariance matrix.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_n_comps">n_comps</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>).
+Number of components to retain. If <code>NULL</code>, all components are retained
+up to the maximum allowed by the selected backend.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_center_data">center_data</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+center variables to zero mean. If <code>M</code> is detected as a data matrix and
+any column mean is nonzero, centering is performed automatically.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_scale_data">scale_data</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+scale variables.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_fat_matrix">fat_matrix</code></td>
+<td>
+<p>A logical value or <code>NULL</code> (default <code>NULL</code>). If
+<code>NULL</code>, the backend is selected automatically: data matrices with
+<code class="reqn">n &lt; p</code> use the fat backend and all other inputs use the tall backend.
+If <code>TRUE</code>, request the fat backend. If <code>FALSE</code>, use the tall
+backend. Covariance and correlation matrices always use the tall backend.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_screeplot">screeplot</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+produce a scree plot.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_qq_plot">qq_plot</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+produce a Wachter qq-plot with <code><a href="#topic+mp_qqplot">mp_qqplot</a></code>.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_n_obs">n_obs</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>).
+Number of rows in the original data set. Required when
+<code>qq_plot = TRUE</code> and <code>M</code> is a covariance or correlation
+matrix. If not available, the Wachter qq-plot cannot be produced.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_neigen_toplot">neigen_toplot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default
+<code>NULL</code>). Number of eigenvalues to show in diagnostic plots. If
+<code>NULL</code>, all available eigenvalues are shown.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_cor">cor</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>); the diagnostic plot uses <code>common_var</code> for the
+Marchenko&ndash;Pastur quantiles.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_common_var">common_var</code></td>
+<td>
+<p>A positive numeric scalar or <code>NULL</code> (default
+<code>NULL</code>). Common population variance assumed for the Wachter
+qq-plot. Required when <code>qq_plot = TRUE</code> and <code>cor = FALSE</code>.
+When <code>cor = TRUE</code>, the reference variance is set to 1.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_pm">pm</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>, compute
+the requested eigenpairs by power method and rank-one deflation.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_eps_pm">eps_pm</code></td>
+<td>
+<p>A positive numeric scalar (default <code>1e-4</code>). Convergence
+tolerance for the power method.</p>
+</td></tr>
+<tr><td><code id="pca_+3A_maxiter_pm">maxiter_pm</code></td>
+<td>
+<p>A positive integer scalar (default <code>1000</code>). Maximum
+number of power-method iterations.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>n_comps</code> controls how many components are retained in the
+returned object.
+The tall backend computes PCA from the covariance or
+correlation matrix, so passing this saves its computation from the data
+matrix. If a covariance or correlation matrix is passed, the scores
+cannot be computed and are returned as <code>NULL</code>.
+The fat backend computes PCA in row space and converts the retained
+eigenvectors back to variable weights.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An <code>pca_object</code> which is the same as an <code><a href="#topic+spca_object">spca_object</a></code> with an additional <code>eigenvalues</code> vector
+containing the eigenvalues up to the rank used by the selected
+backend and <code>n_obs</code> stores the number of observations, if a data
+matrix is passed, or NULL.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_pca = pca(holzinger, n_comps = 4, screeplot = TRUE,
+             n_obs = 144, qq_plot = TRUE)
+summary(ho_pca)
+</code></pre>
+
+<hr><span id='rdfile+plot.spca'></span>
+<h2 id='plot.pca'>Plot the Weights or Contributions of a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+plot.pca'></span><span id='topic+plot.spca'></span>
+
+<h3>Description</h3>
+
+<p>Plot the sparse weights, or the corresponding percentage contributions, from
+a fitted object. The plot can be shown as a bar plot, circular bar
+plot, or heatmap.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>## S3 method for class 'pca'
+plot(x, ...)
+
+## S3 method for class 'spca'
+plot(
+  x,
+  n_plot = NULL,
+  plot_type = c("bars", "circular", "heatmap"),
+  contributions = TRUE,
+  only_nonzero = TRUE,
+  pc_weights = NULL,
+  variable_groups = NULL,
+  plot_title = NULL,
+  return_plot = FALSE,
+  show_plot = TRUE,
+  controls = list(color_scale = c("ggplot", "cbb", "printsafe", "bw"), variable_names =
+    c("none", "auto"), legend_position = c("none", "bottom", "right", "top", "left"),
+    grid_type = c("horizontal", "full", "none"), facet_labels = NULL, legend_title =
+    NULL, x_axis_lab = "variables", adjust_labels_circ = NULL, flip_heatmap = FALSE,
+    heatmap_color_range = c("values", "unit")),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="plot.pca_+3A_x">x</code></td>
+<td>
+<p>An object of class <code>spca</code> or <code>pca</code>.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_...">...</code></td>
+<td>
+<p>Further arguments. These are currently unused and trigger an error
+if supplied.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_n_plot">n_plot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number
+of components to plot. If <code>NULL</code>, all components in <code>x</code> are
+plotted.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_plot_type">plot_type</code></td>
+<td>
+<p>A character vector (default first element <code>"bars"</code>).
+Plot type. Accepted values are <code>"bars"</code>, <code>"circular"</code>, and
+<code>"heatmap"</code>. The first character is enough for matching.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_contributions">contributions</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+plot percentage contributions; otherwise, plot L2 unit weights.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_only_nonzero">only_nonzero</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+plot only variables with at least one nonzero weight.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_pc_weights">pc_weights</code></td>
+<td>
+<p>A numeric matrix, data frame, or <code>NULL</code> (default
+<code>NULL</code>). Optional PCA weights or contributions to plot together with
+the SPCA values for comparison.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_variable_groups">variable_groups</code></td>
+<td>
+<p>A vector, factor, or <code>NULL</code> (default
+<code>NULL</code>). Optional grouping variable of length <code class="reqn">p</code>, where <code class="reqn">p</code>
+is the number of variables. If supplied, bars or tiles are colored by group
+instead of by component.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_plot_title">plot_title</code></td>
+<td>
+<p>A character scalar or <code>NULL</code> (default <code>NULL</code>).
+Optional plot title.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+return the ggplot2 object.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>, print
+the plot.</p>
+</td></tr>
+<tr><td><code id="plot.pca_+3A_controls">controls</code></td>
+<td>
+<p>A list of graphical controls (default described below).
+Supported entries are <code>color_scale</code>, <code>variable_names</code>,
+<code>legend_position</code>, <code>grid_type</code>, <code>facet_labels</code>,
+<code>legend_title</code>, <code>x_axis_lab</code>, <code>adjust_labels_circ</code>,
+<code>flip_heatmap</code>, and <code>heatmap_color_range</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If <code>pc_weights</code> is supplied, SPCA and PCA values are plotted side by
+side for comparison. Circular bar plots are not implemented for this
+comparison, so a standard bar plot is used instead. In this case all
+variables are plotted, regardless of <code>only_nonzero</code>.
+</p>
+<p>For character arguments defined by a default vector of accepted
+values, the first element is the default and the first character of the
+supplied string is used for matching.
+</p>
+<p>The entries in <code>controls</code> are:
+</p>
+
+<ul>
+<li> <p><code>color_scale</code>: a character vector (default first element
+<code>"ggplot"</code>). Accepted values are <code>"ggplot"</code>, <code>"cbb"</code>,
+<code>"printsafe"</code>, and <code>"bw"</code>. <code>"cbb"</code> is colorblind-friendly
+with black, <code>"printsafe"</code> is colorblind- and printer-friendly,
+<code>"bw"</code> uses gray tones, and <code>"ggplot"</code> uses the default ggplot2
+scale.
+</p>
+</li>
+<li> <p><code>variable_names</code>: a character vector or <code>"auto"</code> or
+<code>"none"</code> (default <code>"none"</code>). If <code>"auto"</code>, row names of the
+weight matrix are used as variable names; if row names are missing, no
+variable names are printed. <code>NULL</code> is a deprecated alias for
+<code>"auto"</code> retained for backward compatibility; using it emits a warning
+to use <code>"auto"</code> instead. If set to <code>"none"</code>, variable names are
+not shown. If a character vector of length <code class="reqn">p</code> is supplied, it is used
+as the variable names.
+</p>
+</li>
+<li> <p><code>legend_position</code>: a character vector (default first element
+<code>"none"</code>). Accepted values are <code>"none"</code>, <code>"bottom"</code>,
+<code>"right"</code>, <code>"top"</code>, and <code>"left"</code>.
+</p>
+</li>
+<li> <p><code>grid_type</code>: a character vector (default first element
+<code>"horizontal"</code>). Accepted values are <code>"horizontal"</code>,
+<code>"full"</code>, and <code>"none"</code>.
+</p>
+</li>
+<li> <p><code>facet_labels</code>: a character vector or <code>NULL</code> (default
+<code>NULL</code>). Optional facet labels for components.
+</p>
+</li>
+<li> <p><code>legend_title</code>: a character scalar or <code>NULL</code> (default
+<code>NULL</code>). Optional legend title.
+</p>
+</li>
+<li> <p><code>x_axis_lab</code>: a character scalar (default <code>"variables"</code>).
+Label for the x axis.
+</p>
+</li>
+<li> <p><code>adjust_labels_circ</code>: a numeric vector or <code>NULL</code> (default
+<code>NULL</code>). Optional angular adjustments for circular plot labels.
+</p>
+</li>
+<li> <p><code>flip_heatmap</code>: a logical value (default <code>FALSE</code>). If
+<code>TRUE</code>, flip the heatmap axes.
+</p>
+</li>
+<li> <p><code>heatmap_color_range</code>: a character vector (default first element
+<code>"values"</code>). Accepted values are <code>"values"</code> and <code>"unit"</code>.
+</p>
+</li></ul>
+
+<p>When variable groups are supplied, a legend is needed to identify the groups;
+if the legend is missing or suppressed, it is moved to the bottom. For
+circular plots, the legend is moved to the right unless it is suppressed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_plot = TRUE</code>, returns the ggplot2 object. Otherwise,
+returns <code>NULL</code> invisibly.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>plot(pca)</code>: A <code>pca</code> object is plotted identically to an
+<code>spca</code> object.
+</p>
+</li></ul>
+
+
+<h3>References</h3>
+
+<p>The <code>printsafe</code> palette corresponds to <code>OrRd</code> from
+<a href="https://colorbrewer2.org/">https://colorbrewer2.org/</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 4)
+ho_plot = plot(ho_cspca, return_plot = TRUE)
+
+# Change faceting and legend position.
+ho_plot + ggplot2::facet_wrap(
+  facets = ggplot2::vars(component),
+  ncol = 4,
+  nrow = 1
+) + ggplot2::theme(legend.position = "right")
+
+</code></pre>
+
+<hr><span id='rdfile+print.spca'></span>
+<h2 id='print.pca'>Print the Weights or Contributions of a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+print.pca'></span><span id='topic+print.spca'></span>
+
+<h3>Description</h3>
+
+<p>Print sparse weights, or the corresponding percentage contributions, from a
+fitted object. By default, variables with only zero entries are omitted,
+and cumulative explained variance is shown at the bottom of the table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>## S3 method for class 'pca'
+print(x, ...)
+
+## S3 method for class 'spca'
+print(
+  x,
+  cols = NULL,
+  only_nonzero = TRUE,
+  contributions = TRUE,
+  digits = 3,
+  thresh_card = 1e-07,
+  return_table = FALSE,
+  component_names = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="print.pca_+3A_x">x</code></td>
+<td>
+<p>An object of class <code>spca</code> or <code>pca</code>.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_...">...</code></td>
+<td>
+<p>Further arguments. These are currently unused and trigger an error
+if supplied.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_cols">cols</code></td>
+<td>
+<p>An integer vector or <code>NULL</code> (default <code>NULL</code>).
+Components to print. If <code>NULL</code>, all components are printed. If a
+single integer is supplied, components <code>1:cols</code> are printed.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_only_nonzero">only_nonzero</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+print only variables with at least one weight or contribution whose
+absolute value is greater than or equal to <code>thresh_card</code>.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_contributions">contributions</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+print weights scaled to unit <code class="reqn">L_1</code> norm as percentage contributions;
+otherwise, print L2 unit weights.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_digits">digits</code></td>
+<td>
+<p>An integer scalar (default <code>3</code>). Number of decimal places
+used when printing weights. Contributions are printed as percentages with
+one decimal place.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_thresh_card">thresh_card</code></td>
+<td>
+<p>A numeric scalar (default <code>1e-07</code>). Values with
+absolute magnitude below this threshold are treated as zero in the printed
+table.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_return_table">return_table</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+return the formatted character matrix.</p>
+</td></tr>
+<tr><td><code id="print.pca_+3A_component_names">component_names</code></td>
+<td>
+<p>A character vector or <code>NULL</code> (default
+<code>NULL</code>). Optional component names. If <code>NULL</code>, existing column
+names are used when available; otherwise default names are assigned.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_table = TRUE</code>, returns the formatted character
+matrix. Otherwise, returns <code>NULL</code> invisibly.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>print(pca)</code>: A <code>pca</code> object is printed identically to an
+<code>spca</code> object.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 4)
+ho_cspca
+print(ho_cspca, contributions = FALSE, digits = 4)
+
+</code></pre>
+
+<hr><span id='rdfile+scree_plot'></span>
+<h2 id='scree_plot'>S3 Method for Plotting PCA Eigenvalues in a Screeplot</h2><span id='topic+scree_plot'></span><span id='topic+scree_plot.pca'></span>
+
+<h3>Description</h3>
+
+<p>Plot the leading eigenvalues of a fitted PCA against component order.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>scree_plot(
+  pca_fit,
+  n_plot = NULL,
+  ylab = "eigenvalues",
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+
+## S3 method for class 'pca'
+scree_plot(
+  pca_fit,
+  n_plot = NULL,
+  ylab = "eigenvalues",
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="scree_plot_+3A_pca_fit">pca_fit</code></td>
+<td>
+<p>An object of class <code>"pca"</code>, as returned by <code><a href="#topic+pca">pca()</a></code>.</p>
+</td></tr>
+<tr><td><code id="scree_plot_+3A_n_plot">n_plot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+leading eigenvalues. If <code>NULL</code>, use all stored or supplied eigenvalues.</p>
+</td></tr>
+<tr><td><code id="scree_plot_+3A_ylab">ylab</code></td>
+<td>
+<p>A character scalar (default <code>"eigenvalues"</code>). Y-axis label.</p>
+</td></tr>
+<tr><td><code id="scree_plot_+3A_addtitle">addtitle</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Add a title.</p>
+</td></tr>
+<tr><td><code id="scree_plot_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Print the plot.</p>
+</td></tr>
+<tr><td><code id="scree_plot_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical scalar (default <code>FALSE</code>). Return the plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This diagnostic applies only to objects of class <code>"pca"</code> (i.e. objects
+returned by <code><a href="#topic+pca">pca()</a></code>). It does not apply to sparse fits returned by
+<code><a href="#topic+spca">spca()</a></code> (class <code>"spca"</code>); no method is defined for that class, so
+calling it on such an object raises the standard &quot;no applicable
+method&quot; error rather than producing a plot.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_plot = TRUE</code>, a <code>ggplot</code> object; otherwise <code>NULL</code>
+invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_pca = pca(holzinger, screeplot = FALSE)
+# the screeplot can be produced from `pca` directly.
+# It can be customized by saving it as a `ggplot` object 
+myscreeplot = scree_plot(ho_pca, return_plot = TRUE)
+myscreeplot  + ggplot2::geom_point(color = "red")
+
+</code></pre>
+
+<hr><span id='rdfile+show_contributions_spca'></span>
+<h2 id='show_contributions_spca'>Shows the non-zero contributions separately for each component (Deprecated).
+Use <code>show_weights()</code> instead..
+It just turns an spca object loadings_list into a list of loadings</h2><span id='topic+show_contributions_spca'></span>
+
+<h3>Description</h3>
+
+<p>Shows the non-zero contributions separately for each component (Deprecated).
+Use <code>show_weights()</code> instead..
+It just turns an spca object loadings_list into a list of loadings
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>show_contributions_spca(spca_obj, cols = NULL, return_list = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="show_contributions_spca_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>An spca object</p>
+</td></tr>
+<tr><td><code id="show_contributions_spca_+3A_cols">cols</code></td>
+<td>
+<p>A vector containing the indices of the loadings to be shown.  Can
+be a single value. if missing all loadings are shown: If an integer is
+passed, only that dimension will be returned.</p>
+</td></tr>
+<tr><td><code id="show_contributions_spca_+3A_return_list">return_list</code></td>
+<td>
+<p>Logical: if <code>TRUE</code> the list is returned</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Deprecated, will not work for spca version &gt; 1.1.1. Use <code>show_weights()</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+<hr><span id='rdfile+show_correlations'></span>
+<h2 id='show_correlations'>Show Component Correlations for a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+show_correlations'></span><span id='topic+show_correlations.spca'></span>
+
+<h3>Description</h3>
+
+<p>Print and optionally return the mutual correlations among sparse principal
+components and their correlations with the corresponding principal
+components.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>show_correlations(
+  object,
+  type = c("both", "spcs", "pcs"),
+  digits = 2,
+  print_matrices = TRUE,
+  return_matrices = FALSE,
+  spca_obj = NULL
+)
+
+## S3 method for class 'spca'
+show_correlations(
+  object,
+  type = c("both", "spcs", "pcs"),
+  digits = 2,
+  print_matrices = TRUE,
+  return_matrices = FALSE,
+  spca_obj = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="show_correlations_+3A_object">object</code></td>
+<td>
+<p>An object of class <code>pca</code> or <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="show_correlations_+3A_type">type</code></td>
+<td>
+<p>A character value specifying which correlations to show. Values
+beginning with <code>"s"</code>, <code>"p"</code>, or <code>"b"</code> select the mutual
+sPC correlations, the correlations with the corresponding PCs, or both,
+respectively. The default is <code>"both"</code>.</p>
+</td></tr>
+<tr><td><code id="show_correlations_+3A_digits">digits</code></td>
+<td>
+<p>A non-negative integer scalar (default <code>2</code>). Number of
+decimal places used for printing. Returned matrices are not rounded.</p>
+</td></tr>
+<tr><td><code id="show_correlations_+3A_print_matrices">print_matrices</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+print the requested correlations.</p>
+</td></tr>
+<tr><td><code id="show_correlations_+3A_return_matrices">return_matrices</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If
+<code>TRUE</code>, return the requested unrounded numeric matrix or matrices.</p>
+</td></tr>
+<tr><td><code id="show_correlations_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>Deprecated alias for <code>object</code> (default <code>NULL</code>).
+Supply only one of <code>object</code> and <code>spca_obj</code>. Using the old
+argument name issues a warning.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_matrices = TRUE</code>, a numeric matrix when one type of
+correlation is requested, or a named list of two numeric matrices when
+<code>type = "both"</code>. Otherwise, returns <code>NULL</code> invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 3)
+show_correlations(ho_cspca)
+show_correlations(ho_cspca, type = "s", return_matrices = TRUE)
+
+</code></pre>
+
+<hr><span id='rdfile+show_weights'></span>
+<h2 id='show_weights'>Show the Weights or Contributions of a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+show_weights'></span><span id='topic+show_weights.spca'></span><span id='topic+show_weights.pca'></span>
+
+<h3>Description</h3>
+
+<p>Show selected nonzero component weights or their unit-L1 contributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>show_weights(
+  object,
+  cols = NULL,
+  contribution = TRUE,
+  print_list = TRUE,
+  return_list = FALSE,
+  ...,
+  spca_obj = NULL
+)
+
+## S3 method for class 'spca'
+show_weights(
+  object,
+  cols = NULL,
+  contribution = TRUE,
+  print_list = TRUE,
+  return_list = FALSE,
+  ...,
+  spca_obj = NULL
+)
+
+## S3 method for class 'pca'
+show_weights(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="show_weights_+3A_object">object</code></td>
+<td>
+<p>An object of class <code>pca</code> or <code>spca</code>.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_cols">cols</code></td>
+<td>
+<p>An integer vector selecting components. If a single positive
+integer is supplied, components <code>1:cols</code> are included.
+If <code>NULL</code>, all components are included.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_contribution">contribution</code></td>
+<td>
+<p>A logical value. If <code>TRUE</code>, show unit-L1
+contributions; otherwise, show the original nonzero weights.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_print_list">print_list</code></td>
+<td>
+<p>A logical value indicating whether to print the result.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_return_list">return_list</code></td>
+<td>
+<p>A logical value indicating whether to return the result.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_...">...</code></td>
+<td>
+<p>Additional arguments reserved for S3 method compatibility.</p>
+</td></tr>
+<tr><td><code id="show_weights_+3A_spca_obj">spca_obj</code></td>
+<td>
+<p>Deprecated alias for <code>object</code> (default <code>NULL</code>).
+Supply only one of <code>object</code> and <code>spca_obj</code>. Using the old
+argument name issues a warning.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The selected weights or contributions when requested; otherwise
+<code>NULL</code> invisibly.
+</p>
+
+
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>show_weights(pca)</code>: The weights or contributions of a <code>pca</code> object are shown
+identically those of an <code>spca</code> object.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+<hr><span id='rdfile+spca'></span>
+<h2 id='spca'>Compute LS-SPCA Components</h2><span id='topic+spca'></span>
+
+<h3>Description</h3>
+
+<p>Compute least squares sparse principal components (LS-SPCA) from a data
+matrix or from a covariance/correlation matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>spca(
+  M,
+  n_comps = NULL,
+  alpha = 0.95,
+  ncomp_by_cvexp = NULL,
+  method = c("cspca", "uspca", "pspca"),
+  var_selection = c("fwd", "bkw", "step"),
+  objective = c("cvexp", "r2"),
+  intensive = FALSE,
+  fat_matrix = NULL,
+  fixed_index_list = NULL,
+  center_data = FALSE,
+  scale_data = FALSE,
+  pm_weights = FALSE,
+  eps_pm_weights = 1e-04,
+  maxiter_pm_weights = 1000,
+  pm_varsel = FALSE,
+  eps_pm_varsel = 1e-04,
+  maxiter_pm_varsel = 500
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="spca_+3A_M">M</code></td>
+<td>
+<p>A numeric matrix or data frame. If <code>M</code> is square, it is treated
+as a covariance/correlation matrix and the tall backend is used. Otherwise,
+<code>M</code> is treated as an <code class="reqn">n \times p</code> data matrix.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_n_comps">n_comps</code></td>
+<td>
+<p>A nonnegative integer scalar or <code>NULL</code> (default
+<code>NULL</code>). Number of components to compute. If <code>NULL</code>,
+<code>ncomp_by_cvexp</code> is used to determine the number of components. At
+least one of <code>n_comps</code> and <code>ncomp_by_cvexp</code> must be supplied.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_alpha">alpha</code></td>
+<td>
+<p>A numeric scalar in <code class="reqn">(0, 1]</code> (default <code>0.95</code>). Target
+retained proportion used by variable selection.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_ncomp_by_cvexp">ncomp_by_cvexp</code></td>
+<td>
+<p>A numeric scalar in <code class="reqn">(0, 1]</code> or <code>NULL</code>
+(default <code>NULL</code>). If <code>n_comps = NULL</code>, components are computed
+until cumulative variance explained reaches this value.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_method">method</code></td>
+<td>
+<p>A character vector (default first element <code>"cspca"</code>).
+LS-SPCA variant. Accepted values are <code>"cspca"</code>, <code>"uspca"</code>, and
+<code>"pspca"</code>; only the first letter is used.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_var_selection">var_selection</code></td>
+<td>
+<p>A character vector (default first element
+<code>"fwd"</code>). Variable-selection algorithm. Values starting with
+<code>"f"</code> use forward selection, values starting with <code>"b"</code> use
+backward elimination, and values starting with <code>"s"</code> use
+forward-stepwise selection.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_objective">objective</code></td>
+<td>
+<p>A character vector (default <code>"cvexp"</code> for all
+components).
+Stopping criterion for variable selection. Values starting with <code>"r"</code>
+use the squared-correlation criterion; values starting with <code>"c"</code> use
+cumulative variance explained.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_intensive">intensive</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>, the
+tall backend uses intensive forward CVEXP selection. This option is not
+available for fat matrices.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_fat_matrix">fat_matrix</code></td>
+<td>
+<p>A logical value or <code>NULL</code> (default <code>NULL</code>). If
+<code>NULL</code>, data matrices with more columns than rows use the fat backend,
+and all other inputs use the tall backend. If <code>TRUE</code>, the fat backend
+is requested. If <code>FALSE</code>, the tall backend is used.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_fixed_index_list">fixed_index_list</code></td>
+<td>
+<p>A list of integer-valued vectors, a factor, or
+<code>NULL</code> (default <code>NULL</code>). Each list element gives the fixed
+variable indices for the corresponding component. A <code>NULL</code> or empty
+element requests variable selection for that component. A list of length
+one fixes only the first component; to fix a later component, include
+<code>NULL</code> or empty placeholders for the preceding components. Index sets
+may overlap and need not include every variable. Indices are 1-based. A
+factor remains available as a shorthand for assigning variables to
+component-specific groups. Duplicate indices within a component are
+removed with a warning. If the list is longer than the number of
+components, extra elements are ignored with a warning.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_center_data">center_data</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+center data-matrix columns before fitting. Ignored when <code>M</code> is treated
+as a covariance/correlation matrix.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_scale_data">scale_data</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+scale data-matrix columns before fitting. Ignored when <code>M</code> is treated
+as a covariance/correlation matrix.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_pm_weights">pm_weights</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>, use
+the power method for PC and sparse-weight eigenvectors.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_eps_pm_weights">eps_pm_weights</code></td>
+<td>
+<p>A positive numeric scalar (default <code>1e-4</code>).
+Convergence tolerance for <code>pm_weights</code>.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_maxiter_pm_weights">maxiter_pm_weights</code></td>
+<td>
+<p>A positive integer scalar (default <code>1000</code>).
+Maximum number of iterations for <code>pm_weights</code>.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_pm_varsel">pm_varsel</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>, use
+the power method inside variable selection.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_eps_pm_varsel">eps_pm_varsel</code></td>
+<td>
+<p>A positive numeric scalar (default <code>1e-4</code>).
+Convergence tolerance for <code>pm_varsel</code>.</p>
+</td></tr>
+<tr><td><code id="spca_+3A_maxiter_pm_varsel">maxiter_pm_varsel</code></td>
+<td>
+<p>A positive integer scalar (default <code>500</code>).
+Maximum number of iterations for <code>pm_varsel</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Data matrices are routed to the tall or fat C++ backend. Square
+matrices are treated as covariance/correlation matrices and use the tall
+backend.
+</p>
+<p>Variable selection is controlled by <code>var_selection</code>, <code>objective</code>,
+and <code>intensive</code>.
+</p>
+
+<table>
+<tr>
+ <td style="text-align: left;">
+<code>var_selection</code> </td><td style="text-align: left;"> <code>objective</code> </td><td style="text-align: left;"> Algorithm </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"fwd"</code> </td><td style="text-align: left;"> <code>"r2"</code> </td><td style="text-align: left;"> Forward selection with
+squared-correlation stopping </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"bkw"</code> </td><td style="text-align: left;"> <code>"r2"</code> </td><td style="text-align: left;"> Backward elimination with
+squared-correlation stopping </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"step"</code> </td><td style="text-align: left;"> <code>"r2"</code> </td><td style="text-align: left;"> Forward-stepwise selection with
+squared-correlation stopping </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"fwd"</code> </td><td style="text-align: left;"> <code>"cvexp"</code> </td><td style="text-align: left;"> Forward selection with CVEXP stopping
+</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"bkw"</code> </td><td style="text-align: left;"> <code>"cvexp"</code> </td><td style="text-align: left;"> Backward elimination with CVEXP
+stopping </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>"step"</code> </td><td style="text-align: left;"> <code>"cvexp"</code> </td><td style="text-align: left;"> Forward-stepwise selection with
+CVEXP stopping </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>intensive = TRUE</code> requires <code>"fwd"</code> </td><td style="text-align: left;"> <code>"cvexp"</code> </td><td style="text-align: left;">
+Intensive forward CVEXP selection 
+</td>
+</tr>
+
+</table>
+
+<p>The fat backend currently supports regression-based forward variable
+selection only: <code>var_selection = "f"</code> and <code>intensive = FALSE</code>.
+Other combinations generate an error.
+</p>
+<p>If both <code>n_comps</code> and <code>ncomp_by_cvexp</code> are supplied,
+<code>n_comps</code> takes precedence and automatic stopping by cumulative
+variance explained is disabled.
+</p>
+<p>The returned object is documented in <a href="#topic+spca_object">spca_object</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>spca</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+#default
+ho_cspca = spca(holzinger, n_comps = 4)
+#uncorrelated components and subsets determined using CVEXP as stopping rule
+ho_uspca = spca(holzinger, n_comps = 4, method = "uspca", 
+                objective = "cvexp")
+#fix indices for components 1 and 3 and select them for component 2
+ho_fixed = spca(holzinger, n_comps = 3,
+                fixed_index_list = list(c(1, 2), NULL, c(2, 4, 6)))
+
+</code></pre>
+
+<hr><span id='rdfile+spca_object'></span>
+<h2 id='spca_object'>Sparse Principal Component Analysis Object</h2><span id='topic+spca_object'></span>
+
+<h3>Description</h3>
+
+<p>Objects of class <code>spca</code> are returned by the fitting functions
+<code><a href="#topic+spca">spca()</a></code>, <code><a href="#topic+pca">pca()</a></code>, and <code><a href="#topic+new_spca">new_spca()</a></code>. Objects returned by <code><a href="#topic+pca">pca()</a></code> also inherit
+from class <code>spca_pca</code>.
+</p>
+
+
+<h3>Components</h3>
+
+<p>An object of class <code>spca</code> is a list with the following elements:
+</p>
+
+<dl>
+<dt>weights</dt><dd><p><code class="reqn">p \times r</code> matrix of sparse weights.</p>
+</dd>
+<dt>contributions</dt><dd><p><code class="reqn">p \times r</code> matrix of weights scaled to unit
+<code class="reqn">L_1</code> norm within each sPC.</p>
+</dd>
+<dt>n_comps</dt><dd><p>Number of sPCs.</p>
+</dd>
+<dt>cardinality</dt><dd><p>Number of nonzero weights in each sPC.</p>
+</dd>
+<dt>vexp</dt><dd><p>Variance explained by each sPC.</p>
+</dd>
+<dt>vexp_pc</dt><dd><p>Variance explained by the corresponding PCs.</p>
+</dd>
+<dt>cvexp</dt><dd><p>Cumulative variance explained by the sPCs.</p>
+</dd>
+<dt>rvexp</dt><dd><p>Ratio of <code>vexp</code> to the variance explained by the
+corresponding PC.</p>
+</dd>
+<dt>rcvexp</dt><dd><p>Ratio of <code>cvexp</code> to the cumulative variance explained by
+the corresponding PCs.</p>
+</dd>
+<dt>cor_with_pc</dt><dd><p>Correlation between each sPC and the
+corresponding PC.</p>
+</dd>
+<dt>tot_var</dt><dd><p>Total variance of the data.</p>
+</dd>
+<dt>weights_list</dt><dd><p>List of nonzero weight vectors, one per sPC.</p>
+</dd>
+<dt>spc_cor</dt><dd><p><code class="reqn">n_comps \times n_comps</code> correlation matrix of the
+sPC scores.</p>
+</dd>
+<dt>indices</dt><dd><p>List of variable indices with nonzero weights, one per sPC.</p>
+</dd>
+<dt>scores</dt><dd><p>Optional matrix of sPC scores, returned only when a data matrix
+is supplied.</p>
+</dd>
+<dt>parameters</dt><dd><p>List of parameters used to compute an <code><a href="#topic+spca">spca()</a></code> fit.</p>
+</dd>
+<dt>call</dt><dd><p>Matched call used to compute an <code><a href="#topic+spca">spca()</a></code> fit.</p>
+</dd>
+<dt>eigenvalues</dt><dd><p>For <code><a href="#topic+pca">pca()</a></code> objects, the available PCA eigenvalues.</p>
+</dd>
+<dt>n_obs</dt><dd><p>For <code><a href="#topic+pca">pca()</a></code> objects, the number of observations when available.</p>
+</dd>
+<dt>method_name</dt><dd><p>For <code><a href="#topic+new_spca">new_spca()</a></code> objects, an optional method label.</p>
+</dd>
+</dl>
+
+<p>For backward compatibility, methods also accept objects from earlier package
+versions containing <code>loadings</code> and <code>loadings_list</code> instead of <code>weights</code> and
+<code>weights_list</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+summary.pca">summary.pca</a>()</code>
+</p>
+
+<hr><span id='rdfile+spca_screeplot'></span>
+<h2 id='spca_screeplot'>Plot Eigenvalues in a Scree Plot (Deprecated)</h2><span id='topic+spca_screeplot'></span>
+
+<h3>Description</h3>
+
+<p><code>spca_screeplot()</code> is retained for backward compatibility. Use
+<code><a href="#topic+scree_plot">scree_plot()</a></code> with objects returned by <code><a href="#topic+pca">pca()</a></code> in new code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>spca_screeplot(
+  eigenvalues,
+  n_plot = NULL,
+  ylab = "eigenvalues",
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="spca_screeplot_+3A_eigenvalues">eigenvalues</code></td>
+<td>
+<p>A numeric vector of eigenvalues, or an object returned
+by <code><a href="#topic+pca">pca()</a></code>.</p>
+</td></tr>
+<tr><td><code id="spca_screeplot_+3A_n_plot">n_plot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+leading eigenvalues. If <code>NULL</code>, use all stored or supplied eigenvalues.</p>
+</td></tr>
+<tr><td><code id="spca_screeplot_+3A_ylab">ylab</code></td>
+<td>
+<p>A character scalar (default <code>"eigenvalues"</code>). Y-axis label.</p>
+</td></tr>
+<tr><td><code id="spca_screeplot_+3A_addtitle">addtitle</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Add a title.</p>
+</td></tr>
+<tr><td><code id="spca_screeplot_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Print the plot.</p>
+</td></tr>
+<tr><td><code id="spca_screeplot_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical scalar (default <code>FALSE</code>). Return the plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_plot = TRUE</code>, a <code>ggplot</code> object; otherwise <code>NULL</code>
+invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+wachter_qqplot">wachter_qqplot</a>()</code>
+</p>
+
+<hr><span id='rdfile+summary.spca'></span>
+<h2 id='summary.pca'>Summarize the Variance Explained and Sparsity of a <code>pca</code> or <code>spca</code> Object</h2><span id='topic+summary.pca'></span><span id='topic+summary.spca'></span>
+
+<h3>Description</h3>
+
+<p>Print and, optionally, return summary statistics for evaluating an
+<code>spca</code> object and comparing it with the corresponding PCA
+solutions. It can also print the summaries of a <code>pca</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>## S3 method for class 'pca'
+summary(object, ...)
+
+## S3 method for class 'spca'
+summary(
+  object,
+  cols = NULL,
+  contributions = TRUE,
+  variance_metrics = c("both", "cumulative_relative", "relative", "none"),
+  min_weight = FALSE,
+  cor_with_pc = TRUE,
+  return_table = FALSE,
+  print_table = TRUE,
+  thresh_card = 1e-08,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="summary.pca_+3A_object">object</code></td>
+<td>
+<p>An object of class <code>spca</code> or <code>pca</code>.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_...">...</code></td>
+<td>
+<p>Further arguments. These are currently unused and trigger an error
+if supplied.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_cols">cols</code></td>
+<td>
+<p>An integer vector of component indices or <code>NULL</code>.
+If <code>NULL</code> (the default), all available components are included.
+If a single integer is supplied, components <code>1:cols</code> are included.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_contributions">contributions</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+minimum nonzero values are computed from percentage contributions;
+otherwise, they are computed from weights.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_variance_metrics">variance_metrics</code></td>
+<td>
+<p>A character vector (default first element
+<code>"both"</code>). Controls which relative variance metrics are included.
+Accepted values are <code>"relative"</code>, <code>"cumulative_relative"</code>,
+<code>"both"</code>, and <code>"none"</code>.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_min_weight">min_weight</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+include the minimum nonzero weight or contribution.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_cor_with_pc">cor_with_pc</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+include correlations between sPCs and the corresponding PCs when available.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_return_table">return_table</code></td>
+<td>
+<p>A logical value (default <code>FALSE</code>). If <code>TRUE</code>,
+return the raw numeric summary matrix.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_print_table">print_table</code></td>
+<td>
+<p>A logical value (default <code>TRUE</code>). If <code>TRUE</code>,
+print the formatted summary table.</p>
+</td></tr>
+<tr><td><code id="summary.pca_+3A_thresh_card">thresh_card</code></td>
+<td>
+<p>A numeric scalar (default <code>1e-8</code>). Values with
+absolute magnitude at or below this threshold are treated as zero when
+computing cardinality.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For each component, the following summaries can be computed:
+</p>
+
+<table>
+<tr>
+ <td style="text-align: left;">
+Vexp</td><td style="text-align: left;"> The percentage variance explained.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+Cvexp </td><td style="text-align: left;"> The percentage cumulative variance explained.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+Rvexp </td><td style="text-align: left;"> The variance explained relative to the corresponding PC.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+Rcvexp </td><td style="text-align: left;"> The cumulative variance explained relative to the
+corresponding PCs.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+Card </td><td style="text-align: left;"> The cardinality, that is the number of non zero weights.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+Min weight/Min cont </td><td style="text-align: left;"> The minimum absolute value of the nonzero weights
+or contributions, if requested.</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+r </td><td style="text-align: left;"> The correlation between sPCs and the corresponding PCs, if
+requested.
+</td>
+</tr>
+
+</table>
+
+
+
+<h3>Value</h3>
+
+<p>If <code>return_table = TRUE</code>, returns a numeric matrix with the
+selected summary statistics. Otherwise, returns <code>NULL</code> invisibly.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>summary(pca)</code>: Summarize a <code>pca</code> object using the shared
+summary method.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Examples in <code><a href="#topic+aggregate_by_group">aggregate_by_group</a></code>.
+</p>
+<p>Other spca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_loadings_sign_spca">change_loadings_sign_spca</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+change_weights_sign_spca">change_weights_sign_spca</a>()</code>,
+<code><a href="#topic+compare_spca">compare_spca</a>()</code>,
+<code><a href="#topic+is.spca">is.spca</a>()</code>,
+<code><a href="#topic+new_spca">new_spca</a>()</code>,
+<code><a href="#topic+plot.pca">plot.pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+show_contributions_spca">show_contributions_spca</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca">spca</a>()</code>,
+<code><a href="#topic+spca_object">spca_object</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>data(holzinger)
+ho_cspca = spca(holzinger, n_comps = 2)
+summary(ho_cspca)
+
+</code></pre>
+
+<hr><span id='rdfile+wachter_qqplot'></span>
+<h2 id='wachter_qqplot'>Wachter qq Plot for Eigenvalues (Deprecated)</h2><span id='topic+wachter_qqplot'></span>
+
+<h3>Description</h3>
+
+<p><code>wachter_qqplot()</code> is retained for backward compatibility. Use
+<code><a href="#topic+mp_qqplot">mp_qqplot()</a></code> with objects returned by <code><a href="#topic+pca">pca()</a></code> in new code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>wachter_qqplot(
+  eigenvalues,
+  p = NULL,
+  n,
+  gamma,
+  cor = TRUE,
+  common_var = 1,
+  n_plot = NULL,
+  n_fitline = NULL,
+  addtitle = TRUE,
+  show_plot = TRUE,
+  return_plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table role = "presentation">
+<tr><td><code id="wachter_qqplot_+3A_eigenvalues">eigenvalues</code></td>
+<td>
+<p>A numeric vector of eigenvalues in decreasing order, or
+an object returned by <code><a href="#topic+pca">pca()</a></code>.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_p">p</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+variables. If <code>NULL</code>, use the weight-matrix row count for a PCA object,
+or the number of supplied eigenvalues for a numeric vector.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_n">n</code></td>
+<td>
+<p>An integer scalar with no default. Number of observations.
+For a PCA object, it can be omitted if stored in the object. For a
+numeric vector, it is required unless <code>gamma</code> is supplied.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_gamma">gamma</code></td>
+<td>
+<p>A positive numeric scalar with no default. Ratio of
+observations to variables. If omitted, use <code>n / p</code>, or infer the
+counts from a supplied PCA object.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_cor">cor</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Passed to <code><a href="#topic+mp_qqplot">mp_qqplot()</a></code>
+for PCA-object input. Ignored for numeric-vector input, which always
+scales the theoretical quantiles to sum to <code>p</code>.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_common_var">common_var</code></td>
+<td>
+<p>A positive numeric scalar (default <code>1</code>). Assumed
+common population variance. Passed to <code><a href="#topic+mp_qqplot">mp_qqplot()</a></code> for PCA objects.
+For numeric vectors, its scale is removed by the normalization to <code>p</code>.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_n_plot">n_plot</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>). Number of
+leading eigenvalues. If <code>NULL</code>, use all stored or supplied eigenvalues.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_n_fitline">n_fitline</code></td>
+<td>
+<p>An integer scalar or <code>NULL</code> (default <code>NULL</code>: no line).
+Zero also omits the line. If positive, fit a line using the last <code>n_fitline</code> points. If negative, exclude the largest
+<code>abs(n_fitline)</code> points.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_addtitle">addtitle</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Add a title.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_show_plot">show_plot</code></td>
+<td>
+<p>A logical scalar (default <code>TRUE</code>). Print the plot.</p>
+</td></tr>
+<tr><td><code id="wachter_qqplot_+3A_return_plot">return_plot</code></td>
+<td>
+<p>A logical scalar (default <code>FALSE</code>). Return the plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If <code>return_plot = TRUE</code>, a <code>ggplot</code> object; otherwise <code>NULL</code>
+invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pca: 
+<code><a href="#topic+aggregate_by_group">aggregate_by_group</a>()</code>,
+<code><a href="#topic+change_sign">change_sign</a>()</code>,
+<code><a href="#topic+is.pca">is.pca</a>()</code>,
+<code><a href="#topic+mp_qqplot">mp_qqplot</a>()</code>,
+<code><a href="#topic+pca">pca</a>()</code>,
+<code><a href="#topic+print.pca">print.pca</a>()</code>,
+<code><a href="#topic+scree_plot">scree_plot</a>()</code>,
+<code><a href="#topic+show_correlations">show_correlations</a>()</code>,
+<code><a href="#topic+show_weights">show_weights</a>()</code>,
+<code><a href="#topic+spca_screeplot">spca_screeplot</a>()</code>
+</p>
+
+</main>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+</body></html>

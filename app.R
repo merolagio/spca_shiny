@@ -1,8 +1,11 @@
 #=================================================P
-#COMPANION APP TO THE SPCA TUTORIAL
+#COMPANION APP TO THE spca PACKAGE
+#https://github.com/merolagio/spca
 #GIOVANNI M. MEROLA
 # merolagio@gmail.com
 #=================================================P
+
+#version 0.5.0 updated to spca 1.1.5
 options(shiny.maxRequestSize = 200 * 1024^2)
 library(shiny)
 library(bslib)
@@ -104,7 +107,7 @@ app_css <- "
   width: auto;
   object-fit: contain;
 }
-.manual-loadings-input textarea {
+.manual-weights-input textarea {
   font-family: Consolas, 'Courier New', monospace;
   font-size: 0.9rem;
 }
@@ -195,9 +198,9 @@ nav_panel(
         tags$li(tags$b("Data:"), " Upload a data file in CSV format, and, if needed, the scales, also in CSV format, or one of the existing datasets. You can select the variables to analyze and choose centering/scaling options as needed."),
         tags$li(tags$b("Diagnostics:"), " Inspect the scree plot and the Wachter QQ-plot."),
         tags$li(tags$b("Model:"), " Choose the SPCA variant, objective, variable-selection method, power-method options, and the number of sPCs to compute, then click ", tags$code("Run"), "."),
-        tags$li(tags$b("Results:"), " Review the summary table, plots, and download the fitted (R) object or the loadings (csv) if needed.")
+        tags$li(tags$b("Results:"), " Review the summary table, plots, and download the fitted (R) object or the weights (csv) if needed.")
       ),
-      tags$li(tags$b("Compare:"), " Fit a different LS-SPCA model and compare results with the previous one. Or you can upload a matrix of loadings (csv) obtained outside the spca package and compare its performance with an LS-spca solution."),
+      tags$li(tags$b("Compare:"), " Fit a different LS-SPCA model and compare results with the previous one. Or you can upload a matrix of weights (csv) obtained outside the spca package and compare its performance with an LS-spca solution."),
     p(tags$b("Note:"), " Any non-numeric columns in the uploaded data should be excluded from the variable selection.")
     ),
     
@@ -211,17 +214,21 @@ nav_panel(
         "Introductory vignette ",
         tags$a(href = spca_doc_href("spca_intro.html"), target = "_blank", "HTML"),
         " ",
-        tags$a(href = spca_doc_href("spca_intro.pdf"), target = "_blank", "PDF")
+        tags$a(href = spca_doc_href("spca_intro.pdf"), target = "_blank", "PDF"),
+        " | Extended vignette ",
+        tags$a(href = spca_doc_href("spca_extended.html"), target = "_blank", "HTML"),
+        " ",
+        tags$a(href = spca_doc_href("spca_extended.pdf"), target = "_blank", "PDF")
       ),
       p(
-        "Extended vignette ",
-        tags$a(href = spca_doc_href("spca_extended_vignette.html"), target = "_blank", "HTML"),
+        tags$b("Reference manual "),
+        tags$a(href = spca_doc_href("spca.html"), target = "_blank", "HTML"),
         " ",
-        tags$a(href = spca_doc_href("spca_extended_vignette.pdf"), target = "_blank", "PDF")
+        tags$a(href = spca_doc_href("spca.pdf"), target = "_blank", "PDF")
       ),
       p(tags$b("Refereed articles")),
       p(
-        "Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large loadings. Australia & New Zealand Journal of Statistics, 57, 391-429. ",
+        "Merola, G. M. (2015). Least squares sparse principal component analysis: a backward elimination approach to attain large weights. Australia & New Zealand Journal of Statistics, 57, 391-429. ",
         tags$a(href = "https://arxiv.org/abs/1406.1381", target = "_blank", "Preprint")
       ),
       p(
@@ -347,14 +354,18 @@ nav_panel(
         ),
         selectInput(
           "objective", "Selection objective",
-          choices = c("Squared correlation (r2)" = "r2", "Cumulative variance explained (CVEXP)" = "cvexp"),
-          selected = "r2"
+          choices = c("Squared correlation (r2)" = "r2", 
+                      "Cum. var. expl. (CVEXP)" = "cvexp"),
+          selected = "cvexp"
         ),
-        checkboxInput("intensive", "Use intensive forward CVEXP selection", FALSE),
-        checkboxInput("pm_loading", "Power method for PC/loadings", FALSE),
-        checkboxInput("pm_varsel", "Power method inside variable selection", FALSE),
-        numericInput("ncomp", "Components", value = 4, min = 1, step = 1),
-        numericInput("alpha", "Target recovered variance (alpha)", value = 0.95, min = 0.50, max = 0.999, step = 0.01),
+        checkboxInput("intensive", "Use intensive forward CVEXP selection",
+                      FALSE),
+        checkboxInput("weight", "Power method for PC/weights", FALSE),
+        checkboxInput("varsel", "Power method inside variable selection",
+                      FALSE),
+        numericInput("ncomp", "No. of components", value = 4, min = 1, step = 1),
+        numericInput("alpha", "Target recovered variance (alpha)", value = 0.95,
+                     min = 0.50, max = 0.999, step = 0.01),
         actionButton("run", "Run", class = "btn-primary"),
         br(), br(),
         verbatimTextOutput("run_msg"),
@@ -375,7 +386,7 @@ nav_panel("Results",
               actionButton("refresh_fitplot", "Refresh plot"),
               uiOutput("plot_spca_controls_ui"),
               downloadButton("dl_rds", "Download fit (.rds)"), 
-              downloadButton("dl_loadings_csv", "Download loadings (.csv)"),
+              downloadButton("dl_weights_csv", "Download weights (.csv)"),
               width = 360
             ),
             layout_column_wrap(
@@ -387,7 +398,7 @@ nav_panel("Results",
                 height = "500px"                  # explicit card height — tune this number
               ),
               card(
-                card_header("Loadings / Contributions plot"),
+                card_header("weights / Contributions plot"),
                 plotOutput("fitplot",
                            height = "450px",      # plot height = card height minus header ~50px
                            width  = "100%"),
@@ -406,7 +417,7 @@ nav_panel("Compare",
         "Comparison source",
         choices = c(
           "Fit another model with the current data" = "fit_new",
-          "Create SPCA object from uploaded loadings" = "manual"
+          "Create SPCA object from uploaded weights" = "manual"
         ),
         selected = "fit_new"
       ),
@@ -419,18 +430,20 @@ nav_panel("Compare",
         ),
         selectInput(
           "compare_selection", "Variable selection",
-          choices = c("Forward" = "fwd", "Forward-stepwise" = "step", "Backward" = "bkw"),
+          choices = c("Forward" = "fwd", 
+                      "Forward-stepwise" = "step", "Backward" = "bkw"),
           selected = "fwd"
         ),
         selectInput(
           "compare_objective", "Selection objective",
-          choices = c("Squared correlation (r2)" = "r2", "Cumulative variance explained (CVEXP)" = "cvexp"),
-          selected = "r2"
+          choices = c("Squared correlation (r2)" = "r2", 
+                      "Cum. var. expl. (CVEXP)" = "cvexp"),
+          selected = "cvexp"
         ),
         checkboxInput("compare_intensive", "Use intensive forward CVEXP selection", FALSE),
-        checkboxInput("compare_pm_loading", "Power method for PC/loadings", FALSE),
+        checkboxInput("compare_pm_weight", "Power method for PC/weights", FALSE),
         checkboxInput("compare_pm_varsel", "Power method inside variable selection", FALSE),
-        numericInput("compare_ncomp", "Components", value = 4, min = 1, step = 1),
+        numericInput("compare_ncomp", "No. of components", value = 4, min = 1, step = 1),
         numericInput("compare_alpha", "Target recovered variance (alpha)", value = 0.95, min = 0.50, max = 0.999, step = 0.01),
         actionButton("compare_run", "Run comparison model", class = "btn-primary"),
         checkboxInput("show_names", "Show variable names in plot", FALSE)
@@ -439,10 +452,10 @@ nav_panel("Compare",
         condition = "input.compare_source == 'manual'",
         div(
           class = "upload-drop-zone",
-          div(class = "upload-drop-note", "Drop a CSV/TXT loading matrix here or use Browse."),
+          div(class = "upload-drop-note", "Drop a CSV/TXT weight matrix here or use Browse."),
           fileInput(
-            "manual_loadings_file",
-            "Loading matrix (variables x components)",
+            "manual_weights_file",
+            "weight matrix (variables x components)",
             accept = c(".csv", ".txt"),
             buttonLabel = "Browse..."
           )
@@ -451,7 +464,7 @@ nav_panel("Compare",
         textInput("manual_sep", "Separator for uploaded matrices", value = ","),
         div(
           class = "upload-drop-zone",
-          div(class = "upload-drop-note", "Optionally drop the covariance/correlation matrix used by the loadings."),
+          div(class = "upload-drop-note", "Optionally drop the covariance/correlation matrix used by the weights."),
           fileInput(
             "manual_s_file",
             "Optional covariance/correlation matrix",
@@ -464,7 +477,7 @@ nav_panel("Compare",
       ),
       br(), br(),
       downloadButton("dl_compare_rds", "Download comparison fit (.rds)"),
-      downloadButton("dl_compare_loadings_csv", "Download comparison loadings (.csv)"),
+      downloadButton("dl_compare_weights_csv", "Download comparison weights (.csv)"),
       width = 360
     ),
     div(
@@ -700,7 +713,8 @@ server <- function(input, output, session) {
     }
     ev <- eigvals()
     nplot <- min(length(ev), as.integer(input$nplot))
-    pl <- spca::spca_screeplot(eigenvalues = ev, nplot = nplot, show_plot = FALSE, return_plot = TRUE)
+    pl <- spca::spca_screeplot(eigenvalues = ev, n_plot = nplot, 
+                               show_plot = FALSE, return_plot = TRUE)
     print(pl)}, error = function(e) {
       plot.new()
       text(0.5, 0.5, paste("Scree plot error:\n", conditionMessage(e)))
@@ -723,7 +737,7 @@ server <- function(input, output, session) {
     pl <- spca::wachter_qqplot(
       eigenvalues = ev, p = p, n = n, gamma = n / p,
       cor = isTRUE(input$corr_mat),
-      nplot = nplot,
+      n_plot = nplot,
       n_fitline = nfl,
       show_plot = FALSE, return_plot = TRUE
     )
@@ -749,14 +763,18 @@ server <- function(input, output, session) {
     
     X <- Xmat()
     
-    if (isTRUE(input$intensive) && (!identical(input$selection, "fwd") || !identical(input$objective, "cvexp"))) {
-      run_err("Intensive selection requires Forward selection and CVEXP objective.")
+    if (isTRUE(input$intensive) && (!identical(input$selection, "fwd") ||
+                                    !identical(input$objective, "cvexp"))) {
+      run_err("Intensive selection requires Forward selection and CVEXP
+              objective.")
       fit(NULL)
       output$status <- renderText("ERROR")
       return()
     }
-    if (ncol(X) > nrow(X) && (!identical(input$selection, "fwd") || isTRUE(input$intensive))) {
-      run_err("Wide data use the fat-matrix backend, which supports forward selection only and not intensive selection.")
+    if (ncol(X) > nrow(X) && (!identical(input$selection, "fwd") || 
+                              isTRUE(input$intensive))) {
+      run_err("Wide data use the fat-matrix backend, which supports forward
+              selection only and not intensive selection.")
       fit(NULL)
       output$status <- renderText("ERROR")
       return()
@@ -773,8 +791,8 @@ server <- function(input, output, session) {
           var_selection = input$selection,
           objective = input$objective,
           intensive = isTRUE(input$intensive),
-          pm_loading = isTRUE(input$pm_loading),
-          pm_varsel = isTRUE(input$pm_varsel)
+          pm_weights = isTRUE(input$weight),
+          pm_varsel = isTRUE(input$varsel)
         )
         incProgress(1, detail = "Done")
         ans
@@ -810,7 +828,8 @@ server <- function(input, output, session) {
       compare_err("Intensive selection requires Forward selection and CVEXP objective.")
       return()
     }
-    if (ncol(X) > nrow(X) && (!identical(input$compare_selection, "fwd") || isTRUE(input$compare_intensive))) {
+    if (ncol(X) > nrow(X) && (!identical(input$compare_selection, "fwd") ||
+                              isTRUE(input$compare_intensive))) {
       compare_err("Wide data use the fat-matrix backend, which supports forward selection only and not intensive selection.")
       return()
     }
@@ -826,7 +845,7 @@ server <- function(input, output, session) {
           var_selection = input$compare_selection,
           objective = input$compare_objective,
           intensive = isTRUE(input$compare_intensive),
-          pm_loading = isTRUE(input$compare_pm_loading),
+          pm_weight = isTRUE(input$compare_pm_weight),
           pm_varsel = isTRUE(input$compare_pm_varsel)
         )
         incProgress(1, detail = "Done")
@@ -877,7 +896,7 @@ server <- function(input, output, session) {
       if (nrow(S) != ncol(S)) stop("The covariance/correlation matrix must be square.", call. = FALSE)
       if (nrow(A) != ncol(S)) {
         stop(
-          "The loading matrix has ", nrow(A), " rows, but the covariance/correlation matrix is ",
+          "The weight matrix has ", nrow(A), " rows, but the covariance/correlation matrix is ",
           ncol(S), " by ", ncol(S), ".",
           call. = FALSE
         )
@@ -889,7 +908,7 @@ server <- function(input, output, session) {
     X <- Xmat()
     if (nrow(A) != ncol(X)) {
       stop(
-        "The loading matrix has ", nrow(A), " rows, but the current data have ",
+        "The weight matrix has ", nrow(A), " rows, but the current data have ",
         ncol(X), " variables.",
         call. = FALSE
       )
@@ -902,9 +921,9 @@ server <- function(input, output, session) {
     manual_err(NULL)
     manual_fit(NULL)
     obj <- tryCatch({
-      A <- read_uploaded_matrix(input$manual_loadings_file, input$manual_header, input$manual_sep, "loading matrix")
+      A <- read_uploaded_matrix(input$manual_weights_file, input$manual_header, input$manual_sep, "weight matrix")
       mats <- manual_context_matrix(A)
-      spca::new_spca(A = mats$A, S = mats$S, X = mats$X, method_name = "Manual loadings")
+      spca::new_spca(A = mats$A, S = mats$S, X = mats$X, method_name = "Manual weights")
     }, error = function(e) e)
     
     if (inherits(obj, "error")) {
@@ -923,7 +942,7 @@ server <- function(input, output, session) {
   })
   compare_result <- reactive({
     req(fit(), compare_obj())
-    n_compare <- min(ncol(fit()$loadings), ncol(compare_obj()$loadings))
+    n_compare <- min(ncol(fit()$weights), ncol(compare_obj()$weights))
     vg <- if (isTRUE(scale_present()) && identical(input$sep_scales, "yes")) {
       scale_fac()
     } else {
@@ -935,12 +954,12 @@ server <- function(input, output, session) {
       contributions = TRUE,
       only_nonzero = input$only_nonzero_plot %||% TRUE,
       variable_groups = vg,
-      plot_loadings = TRUE,
+      plot_weights = TRUE,
       plot_type = input$plot_type %||% "bars",
       methods_names = c("Main fit", "Comparison"),
       x_axis_var_names = isTRUE(input$show_names),
       color_scale = input$color_scale %||% "ggplot",
-      print_loadings = FALSE,
+      print_weights = FALSE,
       return_tables = TRUE,
       print_tables = FALSE,
       return_plot = TRUE,
@@ -952,11 +971,11 @@ server <- function(input, output, session) {
     if (identical(input$compare_source %||% "fit_new", "manual")) {
       if (!is.null(manual_err())) return(paste("ERROR:", manual_err()))
       if (!is.null(manual_fit())) return("Manual SPCA object created.")
-      return("Upload a loading matrix. Optionally upload its covariance/correlation matrix to speed evaluation.")
+      return("Upload a weight matrix. Optionally upload its covariance/correlation matrix to speed evaluation.")
     }
     if (!is.null(compare_err())) return(paste("ERROR:", compare_err()))
     if (!is.null(compare_fit())) return("Comparison model fitted.")
-    "Fit another model with the current Data-tab matrix, or switch to uploaded loadings."
+    "Fit another model with the current Data-tab matrix, or switch to uploaded weights."
   })
   
   output$manual_summary_tbl <- renderDT({
@@ -978,7 +997,7 @@ server <- function(input, output, session) {
   
   output$manual_compare_plot <- renderPlot({
     req(compare_result())
-    print(compare_result()$loadings_plot)
+    print(compare_result()$weights_plot)
   })
   output$dl_compare_rds <- downloadHandler(
     filename = function() paste0("spca_comparison_fit_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".rds"),
@@ -987,20 +1006,20 @@ server <- function(input, output, session) {
       saveRDS(compare_obj(), file = file)
     }
   )
-  output$dl_compare_loadings_csv <- downloadHandler(
+  output$dl_compare_weights_csv <- downloadHandler(
     filename = function() {
-      paste0("spca_comparison_loadings_", format(Sys.Date(), "%Y%m%d"), ".csv")
+      paste0("spca_comparison_weights_", format(Sys.Date(), "%Y%m%d"), ".csv")
     },
     content = function(file) {
       req(compare_obj())
       obj <- compare_obj()
       L <- tryCatch({
-        if (isS4(obj) && "loadings" %in% methods::slotNames(obj)) {
-          methods::slot(obj, "loadings")
-        } else if (is.list(obj) && "loadings" %in% names(obj)) {
-          obj$loadings
+        if (isS4(obj) && "weights" %in% methods::slotNames(obj)) {
+          methods::slot(obj, "weights")
+        } else if (is.list(obj) && "weights" %in% names(obj)) {
+          obj$weights
         } else {
-          stop("Cannot find loadings in comparison object (no slot/element named 'loadings').")
+          stop("Cannot find weights in comparison object (no slot/element named 'weights').")
         }
       }, error = function(e) {
         data.frame(Error = conditionMessage(e), stringsAsFactors = FALSE)
@@ -1016,7 +1035,7 @@ server <- function(input, output, session) {
     summary_args <- list(
       object = fit(),
       contributions = isTRUE(input$plotcontrib),
-      min_load = FALSE,
+      min_weight = FALSE,
       cor_with_pc = TRUE,
       return_table = TRUE,
       print_table = FALSE
@@ -1062,7 +1081,7 @@ server <- function(input, output, session) {
     
     DT::datatable(tab, options = list(pageLength = 25, scrollX = TRUE))
   })
-  # Loading plot ====================
+  # weight plot ====================
   # interactive 
   output$plot_spca_controls_ui <- renderUI({
     nmax <- as.integer(input$ncomp)
@@ -1129,7 +1148,7 @@ server <- function(input, output, session) {
     var_names <- if (vn) colnames(Xmat()) else "none"
     kplot <- as.integer(input$plot_comp)
     if (is.na(kplot) || kplot < 1L) kplot <- 1L
-    kplot <- min(kplot, ncol(obj$loadings))
+    kplot <- min(kplot, ncol(obj$weights))
     controls <- list(
       color_scale = input$color_scale %||% "ggplot",
       variable_names = var_names,
@@ -1166,19 +1185,19 @@ server <- function(input, output, session) {
     filename = function() paste0("spca_fit_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".rds"),
     content = function(file) saveRDS(fit(), file = file)
   )
-  output$dl_loadings_csv <- downloadHandler(
+  output$dl_weights_csv <- downloadHandler(
   filename = function() {
-    paste0("spca_loadings_", format(Sys.Date(), "%Y%m%d"), ".csv")
+    paste0("spca_weights_", format(Sys.Date(), "%Y%m%d"), ".csv")
   },
   content = function(file) {
     obj <- fit()
     L <- tryCatch({
-      if (isS4(obj) && "loadings" %in% methods::slotNames(obj)) {
-        methods::slot(obj, "loadings")
-      } else if (is.list(obj) && "loadings" %in% names(obj)) {
-        obj$loadings
+      if (isS4(obj) && "weights" %in% methods::slotNames(obj)) {
+        methods::slot(obj, "weights")
+      } else if (is.list(obj) && "weights" %in% names(obj)) {
+        obj$weights
       } else {
-        stop("Cannot find loadings in fit object (no slot/element named 'loadings').")
+        stop("Cannot find weights in fit object (no slot/element named 'weights').")
       }
     }, error = function(e) {
       data.frame(Error = conditionMessage(e), stringsAsFactors = FALSE)
